@@ -1,4 +1,4 @@
-# Copyright 2024, Battelle Energy Alliance, LLC, ALL RIGHTS RESERVED
+# Copyright 2024-2025, Battelle Energy Alliance, LLC, ALL RIGHTS RESERVED
 
 """
 This module holds the Bitfield and Bitfield Field classes which are data
@@ -30,8 +30,8 @@ class BitfieldField:
 
         Args:
             name (str): Field Name
-            description (str): Field Description
-            fieldType (str): Field Type string
+            description (str): Field Description.
+            fieldType (str): Field Type string.
             bits (str): The bit(s) this field occupies.
                 Format "bit" or "lower..upper" (i.e., "3" or "2..7")
             scope (str, optional): Scope containing the field type.
@@ -54,7 +54,7 @@ class Bitfield:
         reference: Bitfield Object Reference.
                 This should be a string providing information of where this
                 Bitfield Object definition comes from.
-                For example, "Specification Unit A, Section 2.5"
+                For example, "Specification Unit A, Section 2.5".
         notes: Developer Notes.
         size: The size of the Bitfield Object in bits.
                 Valid values are 8, 16, 32, and 64.
@@ -76,7 +76,7 @@ class Bitfield:
         Initialization Function
 
         Args:
-            name (str): Bitfield Object Name
+            name (str): Bitfield Object Name.
             reference (str): Bitfield Object Reference.
                 This should be a string providing information of where this
                 Bitfield Object definition comes from.
