@@ -1,15 +1,22 @@
 # Copyright 2024, Battelle Energy Alliance, LLC, ALL RIGHTS RESERVED
 
+"""
+This module holds functions and variables related to Zeek code.
+"""
+
 from string import Template
-from math import ceil 
+from math import ceil
 import re
 import utils
 import generation_utils
 
+# This doesn't seem to be used?
 TYPE_TO_EMPTY  = {
     "string" : "",
     "count" : 0,
 }
+
+# This doesn't seem to be used?
 genericZeekField = Template("""
     # Timestamp for when the event happened.
     ts$padding: time &log;
@@ -21,23 +28,66 @@ genericZeekField = Template("""
     id$padding: conn_id &log;
     """)
 
+
 class ZeekField:
+    """
+    This class stores data related to a Zeek field.
+
+    Settable class variables:
+        name: Name of the field.
+        type: The type of the field.
+    """
     def __init__(self, name="", type=""):
+        """
+        Initialization Function
+
+        Args:
+            name (str, optional): The name of the field. Defaults to "".
+            type (str, optional): The type of the field. Defaults to "".
+        """
         self.name = name
         self.type = type
 
 
 class ZeekMain:
+    """
+    This class holds data and has functions related to generating main.zeek.
+
+    Additional class variables:
+        records: Array of ZeekRecord items to be used with this instance.
+            Updated using the addRecord class function.
+    """
     def __init__(self):
+        """
+        Initialization Function
+        """
         self.records = []
-    
+
     def addRecord(self, record):
+        """
+        Adds a (non-duplicate) ZeekRecord to this instance of the class.
+
+        Args:
+            record (ZeekRecord): The record to add.
+        """
         for currentRecord in self.records:
             if record.name == currentRecord.name:
                 return
         self.records.append(record)
-        
+
     def _generateLogStreamIndividualString(self, record, indent, isSingle):
+        """
+        Generates Zeek code to create a log stream for a particular record.
+
+        Args:
+            record (ZeekRecord): The record to create the log stream for.
+            indent (str): The indentation string to prepend to the lines.
+            isSingle (bool): Whether or not there is only one record associated
+                with this log stream.
+
+        Returns:
+            str: The Zeek code for generating a log stream for the record.
+        """
         returnString = ""
         pathName = record.name.lower()
         if not isSingle:
@@ -49,17 +99,38 @@ class ZeekMain:
         returnString += "{}$path=\"{}_{}\",\n".format(indent, utils.PROTOCOL_NAME.lower(), pathName)
         returnString += "{}$policy=log_policy_{}]);\n".format(indent, record.name.lower())
         return returnString
-        
+
     def _generateLogStreamString(self, records):
+        """
+        Generates Zeek code to create a log stream for all records in this
+        instance of the class.
+
+        Args:
+            records (list): Array of ZeekRecord items to create the log streams
+                for.
+
+        Returns:
+            str: The Zeek code for generating the log streams.
+        """
         returnString = ""
         if len(records) > 1:
             for record in self.records:
                 returnString += self._generateLogStreamIndividualString(record, utils.SINGLE_TAB, False)
-        else:            
+        else:
             returnString += self._generateLogStreamIndividualString(self.records[0], " " * 22, True)
         return returnString
-        
+
     def _generateFileString(self, records):
+        """
+        Generates Zeek code to create the exports for the logs.
+
+        Args:
+            records (list): Array of ZeekRecord items to create the exports
+                for.
+
+        Returns:
+            str: The Zeek code to generate the exports for the logs.
+        """
         returnString = utils.SINGLE_TAB + "redef enum Log::ID += {"
         if len(records) > 1:
             returnString += "\n"
@@ -75,8 +146,19 @@ class ZeekMain:
             returnString += " {} ".format(recordLogName)
         returnString += "};\n\n"
         return returnString
-        
+
     def _generateGlobals(self, records):
+        """
+        Generates Zeek code to allow logs to be enabled or disabled.
+
+        Args:
+            records (list): Array of ZeekRecord items to create the exports
+                for.
+
+        Returns:
+            str: The Zeek code to generate the exports to allow logging to be
+                enabled or disabled.
+        """
         returnString = ""
         for record in records:
             recordLogEventName = "log_{}".format(record.name.lower())
@@ -84,8 +166,19 @@ class ZeekMain:
             returnString += "{}global {}: event(rec: {}{});\n".format(utils.SINGLE_TAB, recordLogEventName, record.scope, record.name)
             returnString += "{}global {}: Log::PolicyHook;\n".format(utils.SINGLE_TAB, recordLogPolicyName)
         return returnString
-        
+
     def _generateEmits(self, records):
+        """
+        Generates Zeek code to emit the logs (i.e., allow the logs to be
+        generated).
+
+        Args:
+            records (list): Array of ZeekRecord items to create the exports
+                for.
+
+        Returns:
+            str: The Zeek code to allow the logs to be written to.
+        """
         returnString = ""
         for record in records:
             recordLogEventName = "log_{}".format(record.name.lower())
@@ -99,8 +192,19 @@ class ZeekMain:
                 returnString += "c: connection"
             returnString += ");\n"
         return returnString
-        
+
     def _generateConnections(self, records):
+        """
+        Generates the Zeek code to add the records to the record connection
+        value used by Zeek.
+
+        Args:
+            records (list): Array of ZeekRecord items to create the exports
+                for.
+
+        Returns:
+            str: The Zeek code to add the records.
+        """
         returnString = ""
         returnString += "# redefine connection record to contain one of each of the {} records\n".format(utils.PROTOCOL_NAME.lower())
         returnString += "redef record connection += {\n"
@@ -110,14 +214,25 @@ class ZeekMain:
         return returnString
 
     def generateMainFile(self, usesLayer2, configuration):
+        """
+        Generates the majority of Zeek code to be placed in main.zeek.
+
+        Args:
+            usesLayer2 (bool): Whether or not the parser works over Layer 2
+                instead of TCP or UDP.
+            configuration (Config): Parser configuration information.
+
+        Returns:
+            str: The contents of the main.zeek file.
+        """
         fileString = "export {\n"
         fileString += self._generateFileString(self.records)
         fileString += self._generateGlobals(self.records)
         fileString += self._generateEmits(self.records)
         fileString += "\n}\n\n"
-        
+
         fileString += self._generateConnections(self.records)
-        
+
         analyzerString = ""
         if [] != configuration.ports:
             tempPorts = {}
@@ -146,8 +261,16 @@ class ZeekMain:
         fileString += analyzerString
         fileString += "}\n"
         return fileString
-    
+
     def addLoggingFunction(self):
+        """
+        Generates the Zeek code to write the to the logging portion of
+        main.zeek.
+
+        Returns:
+            str: The Zeek code to use for the logging functions portion of
+                main.zeek.
+        """
         functionsString = ""
         for record in self.records:
             connectionName = "{}_{}".format(utils.PROTOCOL_NAME.lower(), record.name.lower())
@@ -168,7 +291,39 @@ class ZeekMain:
         return functionsString
 
 class ZeekRecord:
+    """
+    This class stores data related to an individual Zeek Record.
+
+    Non-settable class variables:
+        defaultRecords:
+            Updated using the __init__ class function.
+        fields:
+            Updated using the addField or addFieldList class functions.
+        commandStructures:
+            Updated using the addCommandStructure class function.
+        column:
+            Updated using the addExternalLinkFields, addExternalLinkFieldList,
+            addField, or addFieldList class functions.
+        name:
+            Updated using the __init__ class function.
+        scope:
+            Update using the __init__ class function.
+        externalLinkFields:
+            Updated using the addExternalLinkFields or addExternalLinkFieldList
+            class functions.
+
+    ??? class variables:
+        logName
+        protocol
+    """
     def initializeRecordFields(self):
+        """
+        Generates the list of default record fields for the record.
+
+        Returns:
+            list: Array of ZeekField items that are the default fields for the
+                record.
+        """
         protocolField = ZeekField()
         protocolField.name = "proto"
         protocolField.type = "transport_proto"
@@ -188,6 +343,13 @@ class ZeekRecord:
         return commonFields
 
     def __init__(self, name, scope = ""):
+        """
+        Initialization Function
+
+        Args:
+            name (str): Name of the record
+            scope (str, optional): The scope of the record. Defaults to "".
+        """
         self.defaultRecords = self.initializeRecordFields()
         self.fields = []
         self.commandStructures = []
@@ -195,7 +357,9 @@ class ZeekRecord:
         self.name = utils.commandNameToConst(name).lower() + "_log"
 
         # self.subname = ""
+        # TODO: Is this used anywhere?
         self.logName = ""
+        # TODO: Is this used anywhere?
         self.protocol = ""
         if scope == "":
             scopeName = self.name
@@ -208,14 +372,27 @@ class ZeekRecord:
         self.externalLinkFields = []
 
     def addExternalLinkFields(self, field):
+        """
+        Adds a (non-duplicate) ZeekField to the list of external link fields.
+
+        Args:
+            field (ZeekField): The field to add.
+        """
         for existingField in self.externalLinkFields:
             if existingField.name == field.name:
                 return
         if (ceil((len(field.name) + 1)/4) * 4) > self.column:
             self.column = (ceil((len(field.name) + 1)/4) * 4)
-        self.externalLinkFields.append(field)     
+        self.externalLinkFields.append(field)
 
     def addExternalLinkFieldList(self, fieldList):
+        """
+        Adds ZeekField (non-duplicate) items from a list to the list of
+        external link fields.
+
+        Args:
+            fieldList (list): Array of ZeekField items to add.
+        """
         for field in fieldList:
             for existingField in self.externalLinkFields:
                 if existingField.name == field.name:
@@ -223,17 +400,30 @@ class ZeekRecord:
             else:
                 if (ceil((len(field.name) + 1)/4) * 4) > self.column:
                     self.column = (ceil((len(field.name) + 1)/4) * 4)
-                self.externalLinkFields .append(field)
+                self.externalLinkFields.append(field)
 
     def addField(self, field):
+        """
+        Adds a (non-duplicate) field to the list of fields in the record.
+
+        Args:
+            field (ZeekField): The ZeekField instance to add.
+        """
         for existingField in self.fields:
             if existingField.name == field.name:
                 return
         if (ceil((len(field.name) + 1)/4) * 4) > self.column:
             self.column = (ceil((len(field.name) + 1)/4) * 4)
         self.fields.append(field)
-    
+
     def addFieldList(self, fieldList):
+        """
+        Adds ZeekField (non-duplicate) items from a list to the list of fields
+        in the record.
+
+        Args:
+            fieldList (list): Array of ZeekField items to add.
+        """
         for field in fieldList:
             for existingField in self.fields:
                 if existingField.name == field.name:
@@ -244,6 +434,12 @@ class ZeekRecord:
                 self.fields.append(field)
 
     def addHook(self):
+        """
+        Generates the Zeek code to add a hook for the Zeek record.
+
+        Returns:
+            str: The Zeek code for this record.
+        """
         #TODO: Handle header information; Maybe add additional initial formatting
         hookString = ""
         if not utils.USES_LAYER_2:
@@ -258,16 +454,48 @@ class ZeekRecord:
         return hookString
 
     def addCommandStructure(self, commandStructure):
+        """
+        Adds a (non-duplicate) Object structure if necessary to the record.
+
+        Args:
+            commandStructure (objects.Object): The object to add.
+        """
         if commandStructure not in self.commandStructures and (commandStructure.logIndependently or not commandStructure.logWithParent):
             self.commandStructures.append(commandStructure)
-    
+
     def addFunctions(self, moduleName, allEnums, allBitfields, allObjects, allSwitches, scopes):
+        """
+        Generates the Zeek code for events for the Objects associated with this
+        record.
+
+        Args:
+            moduleName (str): The scope of this Object instance.
+            allEnums (dict): Dictionary of all Enums for the parser broken down
+                by scope, followed by the name of the Enum.
+            allBitfields (dict): Dictionary of all Bitfields for the parser
+                broken down by scope, followed by the name of the Bitfield.
+            allObjects (dict): Dictionary of all Objects for the parser broken
+                down by scope, followed by the name of the Object.
+            allSwitches (dict): Dictionary of all Switches for the parser broken
+                down by scope, followed by the name of the Switch.
+            scopes (list): An array of strings with the scope names used within
+                the parser.
+
+        Returns:
+            str: The Zeek code for the event backends.
+        """
         functionString = ""
         for command in self.commandStructures:
             functionString += command.makeEventBackend(moduleName, self.name, allEnums, allBitfields, allObjects, allSwitches, scopes)
         return functionString
 
     def createRecord(self):
+        """
+        Generates the Zeek code for this record.
+
+        Returns:
+            str: The Zeek code for this record.
+        """
         recordString = ""
         recordString += "{}type {}: record {{\n".format(utils.SINGLE_TAB, self.name)
         for field in self.defaultRecords:

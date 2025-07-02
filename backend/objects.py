@@ -358,8 +358,8 @@ class Object:
             enums (dict): Dictionary of all Enums for the parser broken down
                 by scope, followed by the name of the Enum.
             isPublic (bool, optional): Whether or not this Object is a "public"
-            type Object. In Spicy, public types are types that can be called
-            from other modules and Zeek. Defaults to False.
+                type Object. In Spicy, public types are types that can be
+                called from other modules and Zeek. Defaults to False.
 
         Returns:
             str: A string to use within a Spicy parser representing this
@@ -469,6 +469,23 @@ class Object:
         return processingName
 
     def _adjustForNonFields(self, moduleName, zeekStructureName, allBitfields, tabSize):
+        """
+        Generates the event field necessary for creating Zeek logs.
+
+        Args:
+            moduleName (str): The scope of this Object instance.
+            zeekStructureName (str): Name of the Zeek log structure this will
+                be logged to.
+            allBitfields (dict): Dictionary of all Bitfields for the parser
+                broken down by scope, followed by the name of the Bitfield.
+            tabSize (int): The number of spaces to indent the returned lines
+                by.
+
+        Returns:
+            (str, str): A tuple with the following values:
+                1. The local variable name for the new field.
+                2. The code to use for the new field.
+        """
         event = self.getEvent(moduleName)
         localVariableName = "info_{}".format(zeekStructureName.lower())
         convertingFunctionString = event.getEventFunctionName(allBitfields)
@@ -480,6 +497,20 @@ class Object:
         return (localVariableName, convertingFunctionString)
 
     def _finishForNonFields(self, localVariableName, tabSize, zeekStructureName):
+        """
+        Creates the emit statement for the Zeek logs.
+
+        Args:
+            localVariableName (str): The local variable name used for the
+                logging field (returned by a call to _adjustForNonFields).
+            tabSize (int): The number of spaces to indent the returned lines
+                by.
+            zeekStructureName (str): Name of the Zeek log structure this will
+                be logged to.
+
+        Returns:
+            str: The emit statement code.
+        """
         argument = "c"
         if utils.USES_LAYER_2:
             argument = localVariableName
@@ -488,12 +519,44 @@ class Object:
         return convertingFunctionString
 
     def _getLinkIDConvertingFunctions(self, tabSize, localVariableName, processingName):
+        """
+        Creates the logging strings for all link IDs in the object.
+
+        Args:
+            tabSize (int): The number of spaces to indent the returned lines
+                by.
+            localVariableName (str): The local variable name used for the
+                logging field (returned by a call to _adjustForNonFields).
+            processingName (str): The name to use for event backend generation
+                for this Object instance.
+
+        Returns:
+            str: The logging assignment strings for all the link IDs in the object.
+        """
         convertingFunctionString = ""
         for linkId in self.linkIds:
             convertingFunctionString += "{}{}${} = {}{};\n".format(utils.getTabString(tabSize), localVariableName, utils.commandNameToConst(linkId.name).lower(), processingName, linkId.name)
         return convertingFunctionString
 
     def _updateOnConditionals(self, startingTabSize, field, specificExportOverride, processingName):
+        """
+        Adds the starting code to handle conditionals for a field if needed.
+
+        Args:
+            startingTabSize (int): The number of levels to indent the returned
+                lines by.
+            field (ObjectField): The field to process.
+            specificExportOverride (bool): Whether to override the regular
+                logic used to determine if a override is necessary. True means
+                that a override is necessary, otherwise use regular logic.
+            processingName (str): The name to use for event backend generation
+                for this Object instance.
+
+        Returns:
+            (int, str): A tuple with the following values:
+                1. The new level of indentation to use.
+                2. The actual code to use for the conditional statement.
+        """
         tabSize = startingTabSize
         convertingFunctionString = ""
         if len(field.conditional) > 0:
@@ -505,11 +568,51 @@ class Object:
         return (tabSize, convertingFunctionString)
 
     def _finishOnConditionals(self, field, specificExportOverride, tabSize):
+        """
+        Adds the finishing code to handle conditionals for a field if needed.
+
+        Args:
+            field (ObjectField): The field to process.
+            specificExportOverride (bool): Whether to override the regular
+                logic used to determine if a override is necessary. True means
+                that a override is necessary, otherwise use regular logic.
+            tabSize (int): The number of spaces to indent the returned lines
+                by. This should be the value returned by
+                _updateOnConditionals().
+
+        Returns:
+            str: The code to use to finish the conditional statement.
+        """
         if len(field.conditional) > 0 and (not self.needsSpecificExport or specificExportOverride):
             return "{}}}\n".format(utils.getTabString(tabSize - 1))
         return ""
 
     def _makeEventBackendForBits(self, field, scopes, allBitfields, allEnums, specificExportOverride, localVariableName, processingName, tabSize):
+        """
+        Generates and returns a string representing an event backend for a
+        Bitfield field.
+
+        Args:
+            field (ObjectField): The field to process.
+            scopes (list): An array of strings with the scope names used within
+                the parser.
+            allBitfields (dict): Dictionary of all Bitfields for the parser
+                broken down by scope, followed by the name of the Bitfield.
+            allEnums (dict): Dictionary of all Enums for the parser broken down
+                by scope, followed by the name of the Enum.
+            specificExportOverride (bool): Whether to override the regular
+                logic used to determine if a override is necessary. True means
+                that a override is necessary, otherwise use regular logic.
+            localVariableName (str): The local variable name used for the
+                logging field.
+            processingName (str): The name to use for event backend generation
+                for this Object instance.
+            tabSize (int): The number of spaces to indent the returned lines
+                by.
+
+        Returns:
+            str: The string representing an event backend for a Bitfield field.
+        """
         referenceType = field.referenceType
         fieldPrefix = utils.commandNameToConst(self.name).lower() + "_" +  utils.commandNameToConst(field.name).lower()
         referencedBitfield = None
@@ -536,6 +639,26 @@ class Object:
         return convertingFunctionString
 
     def _makeEventBackendForEnum(self, field, scopes, allEnums, localVariableName, processingName, tabSize):
+        """
+        Generates and returns a string representing an event backend for an
+        Enum field.
+
+        Args:
+            field (ObjectField): The field to process.
+            scopes (list): An array of strings with the scope names used within
+                the parser.
+            allEnums (dict): Dictionary of all Enums for the parser broken down
+                by scope, followed by the name of the Enum.
+            localVariableName (str): The local variable name used for the
+                logging field.
+            processingName (str): The name to use for event backend generation
+                for this Object instance.
+            tabSize (int): The number of spaces to indent the returned lines
+                by.
+
+        Returns:
+            str: The string representing an event backend for an Enum field.
+        """
         zeekName = utils.commandNameToConst(self.name).lower() + "_" + utils.commandNameToConst(field.name).lower()
         for scope in scopes:
             if field.referenceType in allEnums[utils.normalizedScope(scope, "enum")]:
@@ -544,6 +667,24 @@ class Object:
         return "{}{}${} = {}::{}[{}{}];\n".format(utils.getTabString(tabSize), localVariableName, zeekName, enumScope, utils.commandNameToConst(field.referenceType).upper(), processingName, field.name)
 
     def _makeEventBackendForList(self, field, processingName, tabSize, localVariableName, includeConditional = False):
+        """
+        Generates and returns a string representing an event backend for a
+        valid list field.
+
+        Args:
+            field (ObjectField): The field to process.
+            processingName (str): The name to use for event backend generation
+                for this Object instance.
+            tabSize (int): The number of spaces to indent the returned lines
+                by.
+            localVariableName (str): The local variable name used for the
+                logging field.
+            includeConditional (bool, optional): _description_. Defaults to False.
+
+        Returns:
+            str|None: If the list is valid, returns a string representing an
+                event backend for a List field. Otherwise, None.
+        """
         convertingFunctionString = ""
         zeekName = utils.commandNameToConst(self.name).lower() + "_" + utils.commandNameToConst(field.name).lower()
         if field.elementType in utils.spicyToZeek:
@@ -565,6 +706,35 @@ class Object:
             print("Invalid List element of type {}".format(field.elementType))
 
     def _makeEventBackendForObject(self, field, processingName, moduleName, allEnums, allBitfields, allObjects, allSwitches, scopes, localVariableName, startingTabSize, childOverride):
+        """
+        Generates and returns a string representing an event backend for an
+        Object field.
+
+        Args:
+            field (ObjectField): The field to process.
+            processingName (str): The name to use for event backend generation
+                for this Object instance.
+            moduleName (str): The scope of this Object instance.
+            allEnums (dict): Dictionary of all Enums for the parser broken down
+                by scope, followed by the name of the Enum.
+            allBitfields (dict): Dictionary of all Bitfields for the parser
+                broken down by scope, followed by the name of the Bitfield.
+            allObjects (dict): Dictionary of all Objects for the parser broken
+                down by scope, followed by the name of the Object.
+            allSwitches (dict): Dictionary of all Switches for the parser broken
+                down by scope, followed by the name of the Switch.
+            scopes (list): An array of strings with the scope names used within
+                the parser.
+            localVariableName (str): The local variable name used for the
+                logging field.
+            startingTabSize (int): The number of levels to indent the returned
+                lines by.
+            childOverride (bool): True if the child information needs to be
+                overriden. Otherwise, False.
+
+        Returns:
+            str: The string representing an event backend for an Object field.
+        """
         referencedObject = None
         for scope in scopes:
             if field.referenceType in allObjects[utils.normalizedScope(scope, "object")]:
@@ -576,6 +746,37 @@ class Object:
         return ""
 
     def _makeEventBackendForSwitchAction(self, action, processingName, moduleName, allEnums, allBitfields, allObjects, allSwitches, scopes, localVariableName, startingTabSize, childOverride, tabSize):
+        """
+        Generates and returns a string representing an event backend for a
+        Switch Action.
+
+        Args:
+            action (switches.SwitchAction): The switch action to process.
+            processingName (str): The name to use for event backend generation
+                for this Object instance.
+            moduleName (str): The scope of this Object instance.
+            allEnums (dict): Dictionary of all Enums for the parser broken down
+                by scope, followed by the name of the Enum.
+            allBitfields (dict): Dictionary of all Bitfields for the parser
+                broken down by scope, followed by the name of the Bitfield.
+            allObjects (dict): Dictionary of all Objects for the parser broken
+                down by scope, followed by the name of the Object.
+            allSwitches (dict): Dictionary of all Switches for the parser broken
+                down by scope, followed by the name of the Switch.
+            scopes (list): An array of strings with the scope names used within
+                the parser.
+            localVariableName (str): The local variable name used for the
+                logging field.
+            startingTabSize (int): The number of levels to indent the returned
+                lines by.
+            childOverride (bool): True if the child information needs to be
+                overriden. Otherwise, False.
+            tabSize (int): The number of spaces per level to indent the
+                returned lines by.
+
+        Returns:
+            str: The string representing an event backend for a Switch Action.
+        """
         convertingFunctionString = ""
         if action.type == "object":
             objectName = action.referenceType
@@ -612,15 +813,109 @@ class Object:
         return convertingFunctionString
 
     def _makeEventBackendForSwitchOptions(self, switch, processingName, moduleName, allEnums, allBitfields, allObjects, allSwitches, scopes, localVariableName, startingTabSize, childOverride, tabSize):
+        """
+        Generates and returns a string representing an event backend for all
+        Switch Options in a switch.
+
+        Args:
+            switch (switches.Switch): The Switch to process.
+            processingName (str): The name to use for event backend generation
+                for this Object instance.
+            moduleName (str): The scope of this Object instance.
+            allEnums (dict): Dictionary of all Enums for the parser broken down
+                by scope, followed by the name of the Enum.
+            allBitfields (dict): Dictionary of all Bitfields for the parser
+                broken down by scope, followed by the name of the Bitfield.
+            allObjects (dict): Dictionary of all Objects for the parser broken
+                down by scope, followed by the name of the Object.
+            allSwitches (dict): Dictionary of all Switches for the parser broken
+                down by scope, followed by the name of the Switch.
+            scopes (list): An array of strings with the scope names used within
+                the parser.
+            localVariableName (str): The local variable name used for the
+                logging field.
+            startingTabSize (int): The number of levels to indent the returned
+                lines by.
+            childOverride (bool): True if the child information needs to be
+                overriden. Otherwise, False.
+            tabSize (int): The number of spaces per level to indent the
+                returned lines by.
+
+        Returns:
+            str: The string representing an event backend for all switch
+                options in a switch.
+        """
         convertingFunctionString = ""
         for item in switch.options:
             convertingFunctionString += self._makeEventBackendForSwitchAction(item.action, processingName, moduleName, allEnums, allBitfields, allObjects, allSwitches, scopes, localVariableName, startingTabSize, childOverride, tabSize)
         return convertingFunctionString
 
     def _makeEventBackendForSwitchDefault(self, switch, processingName, moduleName, allEnums, allBitfields, allObjects, allSwitches, scopes, localVariableName, startingTabSize, childOverride, tabSize):
+        """
+        Generates and returns a string representing an event backend for a
+        Switch default.
+
+        Args:
+            switch (switches.Switch): The Switch to process.
+            processingName (str): The name to use for event backend generation
+                for this Object instance.
+            moduleName (str): The scope of this Object instance.
+            allEnums (dict): Dictionary of all Enums for the parser broken down
+                by scope, followed by the name of the Enum.
+            allBitfields (dict): Dictionary of all Bitfields for the parser
+                broken down by scope, followed by the name of the Bitfield.
+            allObjects (dict): Dictionary of all Objects for the parser broken
+                down by scope, followed by the name of the Object.
+            allSwitches (dict): Dictionary of all Switches for the parser broken
+                down by scope, followed by the name of the Switch.
+            scopes (list): An array of strings with the scope names used within
+                the parser.
+            localVariableName (str): The local variable name used for the
+                logging field.
+            startingTabSize (int): The number of levels to indent the returned
+                lines by.
+            childOverride (bool): True if the child information needs to be
+                overriden. Otherwise, False.
+            tabSize (int): The number of spaces per level to indent the
+                returned lines by.
+
+        Returns:
+            str: The string representing an event backend for a Switch default.
+        """
         return self._makeEventBackendForSwitchAction(switch.default, processingName, moduleName, allEnums, allBitfields, allObjects, allSwitches, scopes, localVariableName, startingTabSize, childOverride, tabSize)
 
     def _makeEventBackendForSwitch(self, field, processingName, moduleName, allEnums, allBitfields, allObjects, allSwitches, scopes, localVariableName, startingTabSize, childOverride, tabSize):
+        """
+        Generates and returns a string representing an event backend for a
+        Switch field.
+
+        Args:
+            field (ObjectField): The field to process.
+            processingName (str): The name to use for event backend generation
+                for this Object instance.
+            moduleName (str): The scope of this Object instance.
+            allEnums (dict): Dictionary of all Enums for the parser broken down
+                by scope, followed by the name of the Enum.
+            allBitfields (dict): Dictionary of all Bitfields for the parser
+                broken down by scope, followed by the name of the Bitfield.
+            allObjects (dict): Dictionary of all Objects for the parser broken
+                down by scope, followed by the name of the Object.
+            allSwitches (dict): Dictionary of all Switches for the parser broken
+                down by scope, followed by the name of the Switch.
+            scopes (list): An array of strings with the scope names used within
+                the parser.
+            localVariableName (str): The local variable name used for the
+                logging field.
+            startingTabSize (int): The number of levels to indent the returned
+                lines by.
+            childOverride (bool): True if the child information needs to be
+                overriden. Otherwise, False.
+            tabSize (int): The number of spaces per level to indent the returned
+                lines by.
+
+        Returns:
+            str: The string representing an event backend for a Switch field.
+        """
         convertingFunctionString = ""
         for switchScope in scopes:
             if field.referenceType in allSwitches[utils.normalizedScope(switchScope, "")]:
@@ -637,8 +932,40 @@ class Object:
         return convertingFunctionString
 
     def makeEventBackend(self, moduleName, zeekStructureName, allEnums, allBitfields, allObjects, allSwitches, scopes, includeNonFields = True, logObjectVariableName = "", itemPrefix = "", startingTabSize = 1, specificExportOverride=False):
-        if "TrimPoints" in self.name:
-            pass
+        """
+        Generates and returns a string representing an event backend for an
+        Object instance.
+
+        Args:
+            moduleName (str): The scope of this Object instance.
+            zeekStructureName (str): Name of the Zeek log structure this will
+                be logged to.
+            allEnums (dict): Dictionary of all Enums for the parser broken down
+                by scope, followed by the name of the Enum.
+            allBitfields (dict): Dictionary of all Bitfields for the parser
+                broken down by scope, followed by the name of the Bitfield.
+            allObjects (dict): Dictionary of all Objects for the parser broken
+                down by scope, followed by the name of the Object.
+            allSwitches (dict): Dictionary of all Switches for the parser broken
+                down by scope, followed by the name of the Switch.
+            scopes (list): An array of strings with the scope names used within
+                the parser.
+            includeNonFields (bool, optional): Should non-fields (i.e., event
+                fields for logs themselves) be added?. Defaults to True.
+            logObjectVariableName (str, optional): The variable name used for
+                the logging field. Defaults to "".
+            itemPrefix (str, optional): The prefix to use instead of the object
+                name if non-empty. Defaults to "".
+            startingTabSize (int, optional): The number of levels to indent the
+                returned lines by. Defaults to 1.
+            specificExportOverride (bool, optional): Whether to override the
+                regular logic used to determine if a override is necessary.
+                True means that a override is necessary, otherwise use regular
+                logic. Defaults to False.
+
+        Returns:
+            str: Event backend for an Object instance.
+        """
         convertingFunctionString = ""
         localVariableName = logObjectVariableName
         tabSize = startingTabSize

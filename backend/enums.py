@@ -45,12 +45,12 @@ class Enums:
     Settable class variables:
         name: Enum Object Name.
         reference: Enum Object Reference.
-                This should be a string providing information of where this
-                Enum Object definition comes from.
-                For example, "Specification Unit A, Section 2.5"
+            This should be a string providing information of where this
+            Enum Object definition comes from.
+            For example, "Specification Unit A, Section 2.5"
         notes: Developer Notes.
         size: The size of the Enum Object in bits.
-                Valid values are 8, 16, 32, and 64.
+            Valid values are 8, 16, 32, and 64.
         scope: Scope of the Enum Object.
         endianness: Byte arrangement of the bytes in the Enum Object.
             Valid values are "big" (default) and "little".
@@ -69,12 +69,12 @@ class Enums:
         Initialization Function
 
         Args:
-            name (str): Bitfield Object Name
-            reference (str): Bitfield Object Reference.
+            name (str): Enum Object Name
+            reference (str): Enum Object Reference.
                 This should be a string providing information of where this
-                Bitfield Object definition comes from.
+                Enum Object definition comes from.
                 For example, "Specification Unit A, Section 2.5"
-            size (int): The size of the Bitfield Object in bits.
+            size (int): The size of the Enum Object in bits.
                 Valid values are 8, 16, 32, and 64.
         """
         self.name = name
