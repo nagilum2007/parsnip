@@ -18,44 +18,44 @@ class SpicyEvent:
     parsers.
 
     Settable class variables:
-        name: Class name that the events are for.
-        scope: Scope of the class that the events are for.
+        name: class name that the events are for.
+        scope: scope of the class that the events are for.
 
     Additional class variables:
-        arguments: Arguments required by the event. Value depends on whether
-            or not the protcol uses Layer 2 or TCP/UDP.
-            Updated during class initialization.
-        eventFields: Object fields (used directly) that are to be included
+        arguments: arguments required by the event. value depends on whether
+            or not the protcol uses layer 2 or TCP/UDP.
+            updated during class initialization.
+        eventFields: object fields (used directly) that are to be included
             with the event.
-            Set during class initialization.
-        linkFields: Linking fields that are a part of the log, but not part
+            set during class initialization.
+        linkFields: linking fields that are a part of the log, but not part
             of the parser definition.
-            Set during class initialization.
+            set during class initialization.
 
     ? variables:
-        trigger: The trigger keyword to use for the event.
-            Set to "on" during class initialization.
-        relatedBitfields: Bitfields related to the event.
+        trigger: the trigger keyword to use for the event.
+            set to "on" during class initialization.
+        relatedBitfields: bitfields related to the event.
     """
     def __new__(cls, *args, **kwargs):
         """
         Constructor
 
         Returns:
-            SpicyEvent: New Instance of the class.
+            SpicyEvent: new instance of the class.
         """
         return super().__new__(cls)
 
 
     def __init__(self, includedFields=[], linkFields=[]):
         """
-        Initialization Function
+        Initialization function
 
         Args:
-            includedFields (list, optional): Object fields to use with the
-                event. Defaults to [].
-            linkFields (list, optional): Linking fields to use with the
-                event. Defaults to [].
+            includedFields (list, optional): object fields to use with the
+                event. defaults to [].
+            linkFields (list, optional): linking fields to use with the
+                event. defaults to [].
         """
         self.name = ""
         # TODO: Does not seem to be used anywhere?
@@ -72,10 +72,10 @@ class SpicyEvent:
     def generateExport(self):
         """
         Generates the export statement needed for the events file for the
-        associated Object.
+        associated object.
 
         Returns:
-            str: The required export statement for the associated Object.
+            str: the required export statement for the associated object.
         """
         fullScopeExport = "export {}::{};\n".format(self.scope, self.name)
         return fullScopeExport
@@ -86,11 +86,11 @@ class SpicyEvent:
         Object.
 
         Args:
-            allBitfields (dict): Dictionary of all Bitfields for the parser
+            allBitfields (dict): dictionary of all Bitfields for the parser
                 broken down by scope, followed by the name of the Bitfield.
 
         Returns:
-            str: The event string for the associated Object.
+            str: the event string for the associated object.
         """
         basicEvent =  "on {}::{} -> event {}::{}Evt (\n".format(self.scope, self.name, self.scope, self.name)
         scopedArguments = []
@@ -123,14 +123,14 @@ class SpicyEvent:
     def getEventFunctionName(self, allBitfields):
         """
         Generates the event string for the Zeek scripting file for the
-        associated Object.
+        associated object.
 
         Args:
-            allBitfields (dict): Dictionary of all Bitfields for the parser
+            allBitfields (dict): dictionary of all Bitfields for the parser
                 broken down by scope, followed by the name of the Bitfield.
 
         Returns:
-            str: The Zeek event string for the associated Object.
+            str: the Zeek event string for the associated Object.
         """
         eventName = ""
         if utils.USES_LAYER_2:

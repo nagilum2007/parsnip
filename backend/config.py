@@ -1,7 +1,7 @@
 # Copyright 2024-2025, Battelle Energy Alliance, LLC, ALL RIGHTS RESERVED
 
 """
-This module holds the Config classes which is a data storage class for parser
+This module holds the Config class which is a data storage class for parser
 generation configuration information.
 """
 
@@ -16,34 +16,34 @@ class Config:
     parser to be generated.
 
     Settable class variables:
-        protocol: The name of the protocol.
-        scopes: An array of strings with the scope names used within the
-            parser. These are used as subfolder names for additional parser
+        protocol: the name of the protocol.
+        scopes: an array of strings with the scope names used within the
+            parser. these are used as subfolder names for additional parser
             processing.
-        entryPoint: The Object name in "scope.ObjectName" notation
+        entryPoint: the Object name in "scope.ObjectName" notation
             (e.g., "general.Message") used to start processing packets.
-        usesTCP: Whether or not this protocol uses TCP.
-        usesUDP: Whether or not this protocol uses UDP.
-        usesLayer2: Whether or not this protocol uses Ethernet instead of TCP
+        usesTCP: whether or not this protocol uses TCP.
+        usesUDP: whether or not this protocol uses UDP.
+        usesLayer2: whether or not this protocol uses Ethernet instead of TCP
             or UDP.
-        ethernetProtocolNumber: Ethernet Header Protocol Number value
+        ethernetProtocolNumber: ethernet header protocol number value
             (used when usesLayer2 is set to True).
-        ports: Array of dictionaries with two keys: "protocol" and "port".
-            Valid values for "protocol" entry: "tcp" and "udp".
-        customFieldTypes: Set of tuples with the key being the
+        ports: array of dictionaries with two keys: "protocol" and "port".
+            valid values for "protocol" entry: "tcp" and "udp".
+        customFieldTypes: set of tuples with the key being the
             user-defined custom type name and the tuple consisting of:
             the user-defined custom type name, the conversion function name
             used to convert the custom type, and the return type of the
             conversion function.
-        signatureFile: Base-64 encoded signature file.
-        conversionFile: Base-64 encoded conversion code file.
-        gitignoreFile: Base-64 encoded .gitignore file.
-        shortDescription: A short description of the protocol.
-        longDescription: A longer description of the protocol.
+        signatureFile: base-64 encoded signature file.
+        conversionFile: base-64 encoded conversion code file.
+        gitignoreFile: base-64 encoded .gitignore file.
+        shortDescription: a short description of the protocol.
+        longDescription: a longer description of the protocol.
         """
     def __init__(self):
         """
-        Basic Initialization Function
+        Basic initialization function
         """
         self.protocol = ""
         self.scopes = []
@@ -66,12 +66,12 @@ def loadConfig(configFilePath):
     file.
 
     Args:
-        configFilePath (str): Path to the configuration file.
+        configFilePath (str): path to the configuration file.
 
     Returns:
-        (Bool, Config): A tuple with the first value being if the file was
+        (Bool, Config): a tuple with the first value being if the file was
             successfully loaded and parsed and the second value being the
-            Config object loaded with the parsed information.
+            Config structure loaded with the parsed information.
     """
     config = Config()
     if not (os.path.isfile(configFilePath)):

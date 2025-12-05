@@ -2,7 +2,7 @@
 
 """
 This module holds the Enums and EnumField classes which are data storage and
-parser generator helper function classes related to Enum objects.
+parser generator helper function classes related to Enum structures.
 """
 
 import utils
@@ -17,21 +17,21 @@ class EnumField:
         2. name = "False", loggingValue = "False", value = 0
 
     Settable class variables:
-        name: Field name. This value is used to reference the Enum Field when
-            referenced by switches and other objects.
-        loggingValue: Human readable value used for parser log output.
-        value: The (integer) value that this Enum Field represents.
-        notes: Developer Notes.
+        name: field name. this value is used to reference the EnumField when
+            referenced by switches and obects.
+        loggingValue: human readable value used for parser log output.
+        value: the (integer) value that this EnumField represents.
+        notes: developer notes.
     """
     # enumFields are different options inside an enumeration
     def __init__(self, name, loggingValue, value):
         """
-        Initialization Function
+        Initialization function
 
         Args:
-            name (str): Field name.
-            loggingValue (str): Value to use when the field is logged.
-            value (int): The (integer) value that this field represents.
+            name (str): field name.
+            loggingValue (str): value to use when the field is logged.
+            value (int): the (integer) value that this field represents.
         """
         self.name = name
         self.loggingValue = loggingValue
@@ -40,42 +40,42 @@ class EnumField:
 
 class Enums:
     """
-    This class stores data related to an Enum object.
+    This class stores data related to an Enum structure.
 
     Settable class variables:
-        name: Enum Object Name.
-        reference: Enum Object Reference.
-            This should be a string providing information of where this
-            Enum Object definition comes from.
-            For example, "Specification Unit A, Section 2.5"
-        notes: Developer Notes.
-        size: The size of the Enum Object in bits.
-            Valid values are 8, 16, 32, and 64.
-        scope: Scope of the Enum Object.
-        endianness: Byte arrangement of the bytes in the Enum Object.
-            Valid values are "big" (default) and "little".
+        name: enum structure name.
+        reference: enum structure reference.
+            this should be a string providing information of where this
+            enum structure definition comes from.
+            for example, "Specification Unit A, Section 2.5"
+        notes: developer notes.
+        size: the size of the enum structure in bits.
+            valid values are 8, 16, 32, and 64.
+        scope: scope of the enum structure.
+        endianness: byte arrangement of the bytes in the enum structure.
+            valid values are "big" (default) and "little".
 
     Additional class variables:
-        fields: Array of EnumField objects.
-            Updated using the addField class function.
-        column: Used for formatting text while generating a parser.
-            Updated using the addField class function.
-        longestField: Used for formatting text.
-            Keeps the length of the longest field name in fields.
-            Updated using the addField class function.
+        fields: array of EnumField structures.
+            updated using the addField class function.
+        column: used for formatting text while generating a parser.
+            updated using the addField class function.
+        longestField: used for formatting text.
+            keeps the length of the longest field name in fields.
+            updated using the addField class function.
     """
     def __init__(self, name, reference, size):
         """
-        Initialization Function
+        Initialization function
 
         Args:
-            name (str): Enum Object Name
-            reference (str): Enum Object Reference.
-                This should be a string providing information of where this
-                Enum Object definition comes from.
-                For example, "Specification Unit A, Section 2.5"
-            size (int): The size of the Enum Object in bits.
-                Valid values are 8, 16, 32, and 64.
+            name (str): enum structure name
+            reference (str): enum structure reference.
+                this should be a string providing information of where this
+                Enum structure definition comes from.
+                for example, "Specification Unit A, Section 2.5"
+            size (int): the size of the enum structure in bits.
+                valid values are 8, 16, 32, and 64.
         """
         self.name = name
         self.reference = reference
@@ -115,7 +115,7 @@ class Enums:
         the data stored within it.
 
         Returns:
-            str: A string to use within a Spicy parser representing this Enums
+            str: a string to use within a Spicy parser representing this Enums
                 instance.
         """
         # Create spicy-side structures
@@ -140,11 +140,11 @@ class Enums:
         using the data stored within it.
 
         Args:
-            enumScope (str): Scope of the enum in the parser.
+            enumScope (str): scope of the enum in the parser.
 
         Returns:
-            str: A string to use within a Zeek parser representing this Enums
-                instance.
+            str: a string to use within a Zeek parser representing this enum
+                structure instance.
         """
         # This function creates the zeek structure to change an enum into a human readable string
         zeekString = "{}const {} = {{\n".format(utils.SINGLE_TAB, utils.commandNameToConst(self.name).upper())

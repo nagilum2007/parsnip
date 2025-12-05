@@ -14,22 +14,22 @@ class CustomType:
     provided a conversion function for.
 
     Settable class variables:
-        name: The name of the custom type that will be used in the parser.
-        interpretingFunction: The name of the function that is or will be
+        name: the name of the custom type that will be used in the parser.
+        interpretingFunction: the name of the function that is or will be
             located in the conversion file for the parser.
-        returnType: The built-in return type (e.g., string or uint64) returned
+        returnType: the built-in return type (e.g., string or uint64) returned
             by the conversion function.
     """
     def __init__(self, name, interpretingFunction, returnType):
         """
-        Initialization Function
+        Initialization function
 
         Args:
-            name (str): The name of the custom type that will be used in the
+            name (str): the name of the custom type that will be used in the
                 parser.
-            interpretingFunction (str): The name of the function that is or
+            interpretingFunction (str): the name of the function that is or
                 will be located in the conversion file for the parser.
-            returnType (str): The built-in return type (e.g., string or uint64)
+            returnType (str): the built-in return type (e.g., string or uint64)
                 returned by the conversion function.
         """
         self.name = name

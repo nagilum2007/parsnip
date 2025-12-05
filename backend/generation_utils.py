@@ -18,8 +18,8 @@ def copyFile(source, destination):
     Copies a (non-template) file from one location to another.
 
     Args:
-        source (str): Path to the source file.
-        destination (str): Path to copy the file specified by source to.
+        source (str): path to the source file.
+        destination (str): path to copy the file specified by source to.
     """
     with open(source, "r") as inputFile, open(destination, "w") as currentFile:
         currentFile.write(inputFile.read())
@@ -30,9 +30,9 @@ def copyTemplateFile(source, data, destination):
     into the template.
 
     Args:
-        source (str): Path to the source template file.
-        data (dict): Dictionary of data to fill into the template.
-        destination (str): Path to save the output file to.
+        source (str): path to the source template file.
+        data (dict): dictionary of data to fill into the template.
+        destination (str): path to save the output file to.
     """
     with open(source, "r") as inputFile, open(destination, "w") as currentFile:
         currentFile.write(Template(inputFile.read()).substitute(data))
@@ -43,8 +43,8 @@ def writeNodes(nodes, outFilePath):
     the graph node will be saved. Each line of the file represents a node.
 
     Args:
-        nodes (list): Graph node information to save.
-        outFilePath (str): Path to save the node information to.
+        nodes (list): graph node information to save.
+        outFilePath (str): path to save the node information to.
     """
     with open(outFilePath, "w") as outFile:
             for node in nodes:
@@ -55,8 +55,8 @@ def writeDataToFile(data, outFilePath):
     Saves a preformatted string to an output file.
 
     Args:
-        data (str): Data string to save.
-        outFilePath (str): Path to save the data to.
+        data (str): data string to save.
+        outFilePath (str): path to save the data to.
     """
     with open(outFilePath, "w") as outFile:
         outFile.write(data)
@@ -67,19 +67,19 @@ def createAndUseGraphInformation(configuration, objects, switches, bitfields, en
     parts of the parser using that information.
 
     Args:
-        configuration (Config): Parser configuration information.
-        objects (dict): Dictionary of all Objects for the parser broken down
+        configuration (Config): parser configuration information.
+        objects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        switches (dict): Dictionary of all Switches for the parser broken down
+        switches (dict): dictionary of all Switches for the parser broken down
             by scope, followed by the name of the Switch.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
-        entryPointScope (str): Scope of the entry point (top level Object)
+        entryPointScope (str): scope of the entry point (top level Object)
             into the parser.
-        entryPointName (str): Name of the entry point Object for the parser.
-        entryPointKey (str): The name of the graph node for the entry point
+        entryPointName (str): name of the entry point Object for the parser.
+        entryPointKey (str): the name of the graph node for the entry point
             Object.
     """
     ############################################################################
@@ -123,16 +123,16 @@ def generateProtocolEvents(normalScope, entryPointScope, entryPointName, traspor
     protocols it works with.
 
     Args:
-        normalScope (str): Normalized scope of the entry point Object.
-        entryPointScope (str): Non-normalized scope of the entry point Object.
-        entryPointName (str): Name of the entry point Object.
-        trasportProtos (list): List of transport protocols (from
+        normalScope (str): normalized scope of the entry point Object.
+        entryPointScope (str): non-normalized scope of the entry point Object.
+        entryPointName (str): name of the entry point Object.
+        trasportProtos (list): list of transport protocols (from
             {"tcp", "udp"}) that the parser works over.
-        usesLayer2 (bool, optional): Whether or not the parser works over
-            Layer 2 instead of TCP or UDP. Defaults to False.
+        usesLayer2 (bool, optional): whether or not the parser works over
+            layer 2 instead of TCP or UDP. defaults to False.
 
     Returns:
-        str: The event string needed to have the parser called for the
+        str: the event string needed to have the parser called for the
             protocols it works with.
     """
     # TODO: Do we need to use the entryPointScope value anywhere here?
@@ -153,12 +153,12 @@ def _addCrossScopeItem(currentScope, otherScope, itemType, itemReference, crossS
     used for generating imports.
 
     Args:
-        currentScope (str): The scope that references an item in a different
+        currentScope (str): the scope that references an item in a different
             scope.
-        otherScope (str): The scope containing the item that is referenced.
-        itemType (str): The type of item that is referenced.
-        itemReference (str): The name of the item that is referenced.
-        crossScopeList (dict): The dictionary to save the reference
+        otherScope (str): the scope containing the item that is referenced.
+        itemType (str): the type of item that is referenced.
+        itemReference (str): the name of the item that is referenced.
+        crossScopeList (dict): the dictionary to save the reference
             information to.
     """
     if currentScope not in crossScopeList:
@@ -174,18 +174,18 @@ def processDependency(item, currentScope, crossScopeList, customTypes, switches,
     Processes a dependency item and updates any references necessary.
 
     Args:
-        item (object representing a field, option, or dependency): An item
-            (Object Field, Object Dependency, Bitfield Field, or Switch
-            Option) which is referenced by another item.
-        currentScope (str): The scope of the item referencing the item passed
+        item (structure representing a field, option, or dependency): an item
+            (ObjectField, Dependency, BitfieldField, or SwitchOption)
+            which is referenced by another item.
+        currentScope (str): the scope of the item referencing the item passed
             in.
-        crossScopeList (dict): The dictionary to save any necessary reference
+        crossScopeList (dict): the dictionary to save any necessary reference
             information to.
-        customTypes (dict): The dictionary of any custom types used by the
+        customTypes (dict): the dictionary of any custom types used by the
             parser.
-        switches (dict): Dictionary of all Switches for the parser broken down
+        switches (dict): dictionary of all Switches for the parser broken down
             by scope, followed by the name of the Switch.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
     """
     if item.type in ["enum", "object"]:
@@ -214,8 +214,8 @@ def _addUserTypeNodes(configuration, nodeInformation):
     Adds graph nodes for custom types used by the parser.
 
     Args:
-        configuration (Config): Parser configuration information.
-        nodeInformation (dict): Node information dictionary to save the graph
+        configuration (Config): parser configuration information.
+        nodeInformation (dict): node information dictionary to save the graph
             nodes to.
     """
     if bool(configuration.customFieldTypes):
@@ -229,20 +229,20 @@ def _addUserTypeNodes(configuration, nodeInformation):
 
 def _addObjectNodes(configuration, objects, nodeInformation, objectNodes, referenceInformation, fieldsInformation):
     """
-    Adds graph nodes for Objects used by the parser.
+    Adds graph nodes for objects used by the parser.
 
     Args:
-        configuration (Config): Parser configuration information.
-        objects (dict): Dictionary of all Objects for the parser broken down
+        configuration (Config): parser configuration information.
+        objects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        nodeInformation (dict): Node information dictionary to save the graph
+        nodeInformation (dict): node information dictionary to save the graph
             nodes to.
-        objectNodes (dict): Object Node information dictionary to save the
+        objectNodes (dict): object node information dictionary to save the
             graph nodes to.
-        referenceInformation (list): Connection information of connections due
+        referenceInformation (list): connection information of connections due
             to types referenced by the objects.
-        fieldsInformation (list): Connection information of connections due to
-            Object fields.
+        fieldsInformation (list): connection information of connections due to
+            object fields.
     """
     for normalizedScope in objects:
         for objectName in objects[normalizedScope]:
@@ -261,17 +261,17 @@ def _addObjectNodes(configuration, objects, nodeInformation, objectNodes, refere
 
 def _addObjectDependencyNodes(configuration, objects, dependencyNodeInformation, dependencyReferenceInformation, dependencyInformation):
     """
-    Adds graph nodes for dependencies for Object nodes.
+    Adds graph nodes for dependencies for object nodes.
 
     Args:
-        configuration (Config): Parser configuration information.
-        objects (dict): Dictionary of all Objects for the parser broken down
+        configuration (Config): parser configuration information.
+        objects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        dependencyNodeInformation (dict): Graph node dictionary to save
+        dependencyNodeInformation (dict): graph node dictionary to save
             dependency nodes to.
-        dependencyReferenceInformation (list): Connection information of
+        dependencyReferenceInformation (list): connection information of
             connections related to the dependency nodes.
-        dependencyInformation (list): Connection information of connections
+        dependencyInformation (list): connection information of connections
             related to dependency fields.
     """
     for normalizedScope in objects:
@@ -291,18 +291,18 @@ def _addObjectDependencyNodes(configuration, objects, dependencyNodeInformation,
 
 def _addSwitchNodes(configuration, switches, nodeInformation, referenceInformation, fieldsInformation):
     """
-    Add graph nodes for Switches used by the parser.
+    Add graph nodes for switches used by the parser.
 
     Args:
-        configuration (Config): Parser configuration information.
-        switches (dict): Dictionary of all Switches for the parser broken down
+        configuration (Config): parser configuration information.
+        switches (dict): dictionary of all Switches for the parser broken down
             by scope, followed by the name of the Switch.
-        nodeInformation (dict): Node information dictionary to save the graph
+        nodeInformation (dict): node information dictionary to save the graph
             nodes to.
-        referenceInformation (list): Connection information of connections due
+        referenceInformation (list): connection information of connections due
             to types referenced by the switches.
-        fieldsInformation (list): Connection information of connections due to
-            Switch options.
+        fieldsInformation (list): connection information of connections due to
+            switch options.
     """
     for normalizedScope in switches:
         for switchName in switches[normalizedScope]:
@@ -327,17 +327,17 @@ def _addSwitchNodes(configuration, switches, nodeInformation, referenceInformati
 
 def _addSwitchDependencyNodes(configuration, switches, dependencyNodeInformation, dependencyReferenceInformation, dependencyInformation):
     """
-    Adds graph nodes for dependencies for Switch nodes.
+    Adds graph nodes for dependencies for switch nodes.
 
     Args:
-        configuration (Config): Parser configuration information.
-        switches (dict): Dictionary of all Switches for the parser broken down
+        configuration (Config): parser configuration information.
+        switches (dict): dictionary of all Switches for the parser broken down
             by scope, followed by the name of the Switch.
-        dependencyNodeInformation (dict): Graph node dictionary to save
+        dependencyNodeInformation (dict): graph node dictionary to save
             dependency nodes to.
-        dependencyReferenceInformation (list): Connection information of
+        dependencyReferenceInformation (list): connection information of
             connections related to the dependency nodes.
-        dependencyInformation (list): Connection information of connections
+        dependencyInformation (list): connection information of connections
             related to dependency fields.
     """
     for normalizedScope in switches:
@@ -364,18 +364,18 @@ def _addSwitchDependencyNodes(configuration, switches, dependencyNodeInformation
 
 def _addBitfieldNodes(configuration, bitfields, nodeInformation, referenceInformation, fieldsInformation):
     """
-    Add graph nodes for Bitfields used by the parser.
+    Add graph nodes for bitfields used by the parser.
 
     Args:
-        configuration (Config): Parser configuration information.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+        configuration (Config): parser configuration information.
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
-        nodeInformation (dict): Node information dictionary to save the graph
+        nodeInformation (dict): node information dictionary to save the graph
             nodes to.
-        referenceInformation (list): Connection information of connections due
+        referenceInformation (list): connection information of connections due
             to types referenced by the bitfields.
-        fieldsInformation (list): Connection information of connections due to
-            Bitfield fields.
+        fieldsInformation (list): connection information of connections due to
+            bitfield fields.
     """
     for normalizedScope in bitfields:
         for bitfieldName in bitfields[normalizedScope]:
@@ -393,18 +393,18 @@ def _addBitfieldNodes(configuration, bitfields, nodeInformation, referenceInform
 
 def _addEnumNodes(configuration, enums, nodeInformation, referenceInformation, fieldsInformation):
     """
-    Add graph nodes for Enums used by the parser.
+    Add graph nodes for enums used by the parser.
 
     Args:
-        configuration (Config): Parser configuration information.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        configuration (Config): parser configuration information.
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
-        nodeInformation (dict): Node information dictionary to save the graph
+        nodeInformation (dict): node information dictionary to save the graph
             nodes to.
-        referenceInformation (list): Connection information of connections due
+        referenceInformation (list): connection information of connections due
             to types referenced by the enums.
-        fieldsInformation (list): Connection information of connections due to
-            Enum fields.
+        fieldsInformation (list): connection information of connections due to
+            enum fields.
     """
     for normalizedScope in enums:
         for enumName in enums[normalizedScope]:
@@ -425,22 +425,22 @@ def _addNodes(configuration, objects, switches, bitfields, enums):
     Adds the various types of nodes for the graph and returns the information.
 
     Args:
-        configuration (Config): Parser configuration information.
-        objects (dict): Dictionary of all Objects for the parser broken down
+        configuration (Config): parser configuration information.
+        objects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        switches (dict): Dictionary of all Switches for the parser broken down
+        switches (dict): dictionary of all Switches for the parser broken down
             by scope, followed by the name of the Switch.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
 
     Returns:
-        (list, dict, list, list): A tuple with the following values:
-            1. List of Object graph nodes.
-            2. Node information where the keys are the names of the nodes.
-            3. List of connection information from fields and options.
-            4. List of connection information from references.
+        (list, dict, list, list): a tuple with the following values:
+            1. list of object graph nodes.
+            2. node information where the keys are the names of the nodes.
+            3. list of connection information from fields and options.
+            4. list of connection information from references.
     """
     ################################################################################
     # Tracking Structures
@@ -482,25 +482,25 @@ def generateGraph(configuration, objects, switches, bitfields, enums):
     Generates the graph information used to manipulate the parser input.
 
     Args:
-        configuration (Config): Parser configuration information.
-        objects (dict): Dictionary of all Objects for the parser broken down
+        configuration (Config): parser configuration information.
+        objects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        switches (dict): Dictionary of all Switches for the parser broken down
+        switches (dict): dictionary of all Switches for the parser broken down
             by scope, followed by the name of the Switch.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
 
     Returns:
-        (rustworkx.PyDiGraph, list, dict, dict, dict, dict): A tuple with the
+        (rustworkx.PyDiGraph, list, dict, dict, dict, dict): a tuple with the
             following values:
             1. Rustworkx graph representing the parser.
-            2. List of Object graph nodes.
-            3. Node information where the keys are the names of the nodes.
-            4. Map of node names to node index number.
-            5. Map of node index number to node names.
-            6. Connection information where the keys are the connection ID.
+            2. list of Object graph nodes.
+            3. node information where the keys are the names of the nodes.
+            4. map of node names to node index number.
+            5. map of node index number to node names.
+            6. connection information where the keys are the connection ID.
     """
     ############################################################################
     # Load the structures as nodes
@@ -539,32 +539,32 @@ def _processPath(path, entryPointScope, targetScope, nodeInformation, indexToNod
     The path should have the last element be the node that we are currently
     trying to gain information about.
     The returned metadata includes:
-        - path: (list) The path of nodes that was processed.
+        - path: (list) the path of nodes that was processed.
         - needsLoggingParent: (bool) True if a specific logging parent is
             needed.
-        - loggingParent: (str) The logging parent to use
+        - loggingParent: (str) the logging parent to use
             (defaults to the entry point scope).
-        - reason: (str, optional) The reason the logging parent is needed
+        - reason: (str, optional) the reason the logging parent is needed
             (if one is).
 
     Args:
-        path (list): Graph node path to process.
-        entryPointScope (str): Scope of the entry point (top level Object)
+        path (list): graph node path to process.
+        entryPointScope (str): scope of the entry point (top level Object)
             into the parser.
-        targetScope (str): The scope of the node we want the metadata for.
-        nodeInformation (dict): Node information where the keys are the names
+        targetScope (str): the scope of the node we want the metadata for.
+        nodeInformation (dict): node information where the keys are the names
             of the nodes.
-        indexToNode (dict): Map of node index number to node names.
+        indexToNode (dict): map of node index number to node names.
 
     Returns:
-        dict: Dictionary of metadata about the path. The returned metadata
+        dict: dictionary of metadata about the path. the returned metadata
             includes:
-            - path: (list) The path of nodes that was processed.
+            - path: (list) the path of nodes that was processed.
             - needsLoggingParent: (bool) True if a specific logging parent is
                 needed.
-            - loggingParent: (str) The logging parent to use
+            - loggingParent: (str) the logging parent to use
                 (defaults to the entry point scope).
-            - reason: (str, optional) The reason the logging parent is needed
+            - reason: (str, optional) the reason the logging parent is needed
                 (if one is).
     """
     tempPath = []
@@ -608,27 +608,27 @@ def calculatePathInformation(graph, objectNodes, entryPointScope, entryPointKey,
 
     Args:
         graph (rustworkx.PyDiGraph): Rustworkx graph representing the parser.
-        objectNodes (list): List of Object graph nodes.
-        entryPointScope (str): Scope of the entry point (top level Object)
+        objectNodes (list): list of object graph nodes.
+        entryPointScope (str): scope of the entry point (top level Object)
             into the parser.
-        entryPointKey (str): The name of the graph node for the entry point
+        entryPointKey (str): the name of the graph node for the entry point
             Object.
-        nodeInformation (dict): Node information where the keys are the names
+        nodeInformation (dict): node information where the keys are the names
             of the nodes.
-        nodeToIndex (dict): Map of node names to node index number.
-        indexToNode (dict): Map of node index number to node names.
+        nodeToIndex (dict): map of node names to node index number.
+        indexToNode (dict): map of node index number to node names.
 
     Returns:
-        dict: Dictionary where the key is the scope and Object name
+        dict: dictionary where the key is the scope and Object name
             (in the form scope::name) and the value is a list of path
-            information (metadata) for every path to that object. The path
+            information (metadata) for every path to that object. the path
             information is a dictionary which includes includes:
-            - path: (list) The path of nodes that was processed.
+            - path: (list) the path of nodes that was processed.
             - needsLoggingParent: (bool) True if a specific logging parent is
                 needed.
-            - loggingParent: (str) The logging parent to use
+            - loggingParent: (str) the logging parent to use
                 (defaults to the entry point scope).
-            - reason: (str, optional) The reason the logging parent is needed
+            - reason: (str, optional) the reason the logging parent is needed
                 (if one is).
     """
     # Determine paths for every node from the EntryPoint Node
@@ -659,15 +659,15 @@ def determineTopLevelNodes(graph, expectedTopLevelNodes, indexToNode):
 
     Args:
         graph (rustworkx.PyDiGraph): Rustworkx graph representing the parser.
-        expectedTopLevelNodes (list): A list of expected top level nodes.
-            Normally, this should consist of just the entry point node.
-        indexToNode (dict): Map of node index number to node names.
+        expectedTopLevelNodes (list): a list of expected top level nodes.
+            normally, this should consist of just the entry point node.
+        indexToNode (dict): map of node index number to node names.
 
     Returns:
-        (list, list, list): A tuple with the following values:
-            1. A list of missing expected top-level nodes.
-            2. A list of found expected top-level nodes.
-            3. A list of unexpected top-level nodes.
+        (list, list, list): a tuple with the following values:
+            1. a list of missing expected top-level nodes.
+            2. a list of found expected top-level nodes.
+            3. a list of unexpected top-level nodes.
     """
     unexpectedNodes = []
     expectedNodes = []
@@ -688,11 +688,11 @@ def printGraphWarnings(cycles, missingTopLevelNodes, unexpectedTopLevelNodes):
     Prints warnings about issues found with the graph to stdout.
 
     Args:
-        cycles (list): A list of cycles found in the graph. Each item in the
+        cycles (list): a list of cycles found in the graph. each item in the
             list is a list of all nodes involved in the cycle.
-        missingTopLevelNodes (list): A list of expected top-level nodes that
+        missingTopLevelNodes (list): a list of expected top-level nodes that
             were not found in the graph.
-        unexpectedTopLevelNodes (list): A list of unexpected top-level nodes
+        unexpectedTopLevelNodes (list): a list of unexpected top-level nodes
             that were found in the graph.
     """
     if len(cycles) > 0:
@@ -730,36 +730,36 @@ def saveGraphInformation(graph, pathInformation, cycles, missingExpectedTopLevel
     """
     Saves information about the graph to various files.
     Output Files:
-        - paths.json: Path information for the graph.
-        - cycles.txt: Cycles found in the graph. Each line consists of one
+        - paths.json: path information for the graph.
+        - cycles.txt: cycles found in the graph. Each line consists of one
             cycle.
-        - missing_expected_nodes.txt: Expected top-level nodes that were not
-            found in the graph. Each line consists of one such node.
-        - unexpected_top_nodes.txt: Unexpected top-level nodes that were found
-            in the graph. Each line consists of one such node.
-        - output_no_dependencies.svg: Currently, this one is not being
-            generated, but was in the past. This is an SVG image
+        - missing_expected_nodes.txt: expected top-level nodes that were not
+            found in the graph. each line consists of one such node.
+        - unexpected_top_nodes.txt: unexpected top-level nodes that were found
+            in the graph. each line consists of one such node.
+        - output_no_dependencies.svg: currently, this one is not being
+            generated, but was in the past. this is an SVG image
             representation of the graph without dependency information
             included.
 
     Args:
         graph (rustworkx.PyDiGraph): Rustworkx graph representing the parser.
-        pathInformation (dict): Dictionary where the key is the scope and
+        pathInformation (dict): dictionary where the key is the scope and
             Object name (in the form scope::name) and the value is a list of
-            path information (metadata) for every path to that object. The
+            path information (metadata) for every path to that object. the
             path information is a dictionary which includes includes:
-                - path: (list) The path of nodes that was processed.
+                - path: (list) the path of nodes that was processed.
                 - needsLoggingParent: (bool) True if a specific logging parent
                     is needed.
-                - loggingParent: (str) The logging parent to use
+                - loggingParent: (str) the logging parent to use
                     (defaults to the entry point scope).
-                - reason: (str, optional) The reason the logging parent is
+                - reason: (str, optional) the reason the logging parent is
                     needed (if one is).
-        cycles (list): A list of cycles found in the graph. Each item in the
+        cycles (list): a list of cycles found in the graph. each item in the
             list is a list of all nodes involved in the cycle.
-        missingExpectedTopLevelNodes (list): A list of expected top-level
+        missingExpectedTopLevelNodes (list): a list of expected top-level
             nodes that were not found in the graph.
-        unexpectedTopLevelNodes (list): A list of unexpected top-level nodes
+        unexpectedTopLevelNodes (list): a list of unexpected top-level nodes
             that were found in the graph.
     """
     writeDataToFile(json.dumps(pathInformation, indent=4), "paths.json")
@@ -789,23 +789,23 @@ def updateObjectsBasedOnGraphInformation(cycles, pathInformation, objects, entry
     graph of it.
 
     Args:
-        cycles (list): A list of cycles found in the graph. Each item in the
+        cycles (list): a list of cycles found in the graph. each item in the
             list is a list of all nodes involved in the cycle.
-        pathInformation (dict): Dictionary where the key is the scope and
+        pathInformation (dict): dictionary where the key is the scope and
             Object name (in the form scope::name) and the value is a list of
-            path information (metadata) for every path to that object. The
+            path information (metadata) for every path to that object. the
             path information is a dictionary which includes includes:
-                - path: (list) The path of nodes that was processed.
+                - path: (list) the path of nodes that was processed.
                 - needsLoggingParent: (bool) True if a specific logging parent
                     is needed.
-                - loggingParent: (str) The logging parent to use
+                - loggingParent: (str) the logging parent to use
                     (defaults to the entry point scope).
-                - reason: (str, optional) The reason the logging parent is
+                - reason: (str, optional) the reason the logging parent is
                     needed (if one is).
-        objects (dict): Dictionary of all Objects for the parser broken down
+        objects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        entryPointScope (str): Non-normalized scope of the entry point Object.
-        entryPointName (str): Name of the entry point Object.
+        entryPointScope (str): non-normalized scope of the entry point object.
+        entryPointName (str): name of the entry point Object.
     """
     # Deal with cycles
     for cycle in cycles:
@@ -836,20 +836,20 @@ def determineInterScopeDependencies(configuration, bitfields, objects, switches)
     Determines any inter-scope dependencies that exist.
 
     Args:
-        configuration (Config): Parser configuration information.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+        configuration (Config): parser configuration information.
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
-        objects (dict): Dictionary of all Objects for the parser broken down
+        objects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        switches (dict): Dictionary of all Switches for the parser broken down
+        switches (dict): dictionary of all Switches for the parser broken down
             by scope, followed by the name of the Switch.
 
     Returns:
-        dict: A dictionary containing information about cross-scope
-            dependencies. The key represents the scope that has dependencies.
-            The value is dictionary with keys representing the scopes where
-            the dependencies reside. The values are dictionaries where the
-            keys are a subset of "enum", "object", "custom", and "id". The
+        dict: a dictionary containing information about cross-scope
+            dependencies. the key represents the scope that has dependencies.
+            the value is dictionary with keys representing the scopes where
+            the dependencies reside. the values are dictionaries where the
+            keys are a subset of "enum", "object", "custom", and "id". the
             values of these dictionaries are sets with the actual dependency
             names.
     """
@@ -909,8 +909,8 @@ def writeBasicFiles(configuration, outRootFolder):
     - README.md
 
     Args:
-        configuration (Config): Parser configuration information.
-        outRootFolder (str): Output folder path.
+        configuration (Config): parser configuration information.
+        outRootFolder (str): output folder path.
     """
     # .gitignore
     if configuration.gitignoreFile is not None:
@@ -936,7 +936,7 @@ def writeCMakeFiles(outRootFolder):
     cmake/FindSpicyPlugin.cmake files for the parser.
 
     Args:
-        outRootFolder (str): Output root folder path.
+        outRootFolder (str): output root folder path.
     """
     # Create root CMakeLists.txt file
     data = {"protocol": utils.PROTOCOL_NAME}
@@ -967,7 +967,7 @@ def writeTestFiles(outRootFolder):
     - testing/traces/
 
     Args:
-        outRootFolder (str): Output root folder path.
+        outRootFolder (str): output root folder path.
     """
     # Create test folder contents
     testingFolder = os.path.join(outRootFolder, "testing")
@@ -1008,8 +1008,8 @@ def writePackagingFiles(configuration, outRootFolder):
     creates the zkg.meta file.
 
     Args:
-        configuration (Config): Parser configuration information.
-        outRootFolder (str): Output folder path.
+        configuration (Config): parser configuration information.
+        outRootFolder (str): output folder path.
     """
     # Function to write out zkg.meta file
     if not utils.USES_LAYER_2:
@@ -1064,15 +1064,15 @@ def _writeCoreZeekFiles(configuration, scriptsFolder, zeekMainFileObject, allEnu
     - dpd.sig (if one is part of the parser configuration)
 
     Args:
-        configuration (Config): Parser configuration information.
-        scriptsFolder (str): Output folder path.
-        zeekMainFileObject (zeektypes.ZeekMain): Data and functions class
+        configuration (Config): parser configuration information.
+        scriptsFolder (str): output folder path.
+        zeekMainFileObject (zeektypes.ZeekMain): data and functions class
             related to generating main.zeek.
-        allEnums (dict): Dictionary of all Enums for the parser broken down
+        allEnums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
 
     Returns:
-        list: List of Zeek script files (*.zeek) generated by this function.
+        list: list of Zeek script files (*.zeek) generated by this function.
     """
     coreFiles = []
     coreFiles.append("__load__.zeek")
@@ -1123,14 +1123,14 @@ def _writeZeekTypeFiles(scriptsFolder, normalScope, zeekObjects):
     Generate and output *_types.zeek files for the parser.
 
     Args:
-        scriptsFolder (str): Output folder path.
-        normalScope (str): Normalized scope of the entry point Object.
-        zeekObjects (dict): Dictionary of Zeek Objects for the parser. The
+        scriptsFolder (str): output folder path.
+        normalScope (str): normalized scope of the entry point object.
+        zeekObjects (dict): dictionary of Zeek Objects for the parser. The
             key is the logging structure that the object belongs to and the
             value is the object itself.
 
     Returns:
-        list: List of Zeek script files (*.zeek) generated by this function.
+        list: list of Zeek script files (*.zeek) generated by this function.
     """
     contentString = ""
     for zeekLog in zeekObjects.values():
@@ -1150,24 +1150,24 @@ def _writeZeekProcessingFiles(scriptsFolder, normalScope, zeekObjects, enums, bi
     Generate and output *_processing.zeek files for the parser.
 
     Args:
-        scriptsFolder (str): Output folder path.
-        normalScope (str): Normalized version of the scope to generate files
+        scriptsFolder (str): output folder path.
+        normalScope (str): normalized version of the scope to generate files
             for.
-        zeekObjects (dict): Dictionary of Zeek Objects for the parser. The
+        zeekObjects (dict): dictionary of Zeek objects for the parser. the
             key is the logging structure that the object belongs to and the
             value is the object itself.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
-        objects (dict): Dictionary of all Objects for the parser broken down
+        objects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        switches (dict): Dictionary of all Switches for the parser broken down
+        switches (dict): dictionary of all Switches for the parser broken down
             by scope, followed by the name of the Switch.
-        configuration (Config): Parser configuration information.
+        configuration (Config): parser configuration information.
 
     Returns:
-        list: List of Zeek script files (*.zeek) generated by this function.
+        list: list of Zeek script files (*.zeek) generated by this function.
     """
     eventString = ""
     functionString = ""
@@ -1189,17 +1189,17 @@ def _writeZeekEnumFiles(scriptsFolder, scope, normalScope, enums):
     Generate and output *_enum.zeek files (if needed) for the parser.
 
     Args:
-        scriptsFolder (str): Output folder path.
-        scope (str): The non-normalized version of the scope to generate files
+        scriptsFolder (str): output folder path.
+        scope (str): the non-normalized version of the scope to generate files
             for.
-        normalScope (str): Normalized version of the scope to generate files
+        normalScope (str): normalized version of the scope to generate files
             for.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
 
     Returns:
-        list: List of Zeek script files (*.zeek) generated by this function.
-            An empty list is returned if no *_enum.zeek file is needed.
+        list: list of Zeek script files (*.zeek) generated by this function.
+            an empty list is returned if no *_enum.zeek file is needed.
     """
     enumScope = utils.normalizedScope(scope, "enum")
     if enumScope in enums:
@@ -1232,25 +1232,25 @@ def writeZeekFiles(configuration, outRootFolder, zeekTypes, zeekMainFileObject, 
     - scripts/*_enum.zeek
 
     Args:
-        configuration (Config): Parser configuration information.
-        outRootFolder (str): Output folder path.
-        zeekTypes (dict): Dictionary of Zeek Objects for the parser. The key
-            is the scope that the Object belongs to. The value is a dictionary
+        configuration (Config): parser configuration information.
+        outRootFolder (str): output folder path.
+        zeekTypes (dict): dictionary of Zeek objects for the parser. the key
+            is the scope that the Object belongs to. the value is a dictionary
             where the key is the logging structure that the object belongs to
             and the value is the object itself.
-        zeekMainFileObject (zeektypes.ZeekMain): Data and functions class
+        zeekMainFileObject (zeektypes.ZeekMain): data and functions class
             related to generating main.zeek.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
-        objects (dict): Dictionary of all Objects for the parser broken down
+        objects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        switches (dict): Dictionary of all Switches for the parser broken down
+        switches (dict): dictionary of all Switches for the parser broken down
             by scope, followed by the name of the Switch.
 
     Returns:
-        list: List of Zeek script files (*.zeek) generated by this function.
+        list: list of Zeek script files (*.zeek) generated by this function.
     """
     # Create basic zeek files
     scriptsFolder = os.path.join(outRootFolder, "scripts")
@@ -1277,10 +1277,10 @@ def generateBaseConversionFunctions(configuration):
     (empty) conversion function for all custom types.
 
     Args:
-        configuration (Config): Parser configuration information.
+        configuration (Config): parser configuration information.
 
     Returns:
-        str: The contents of the conversion file.
+        str: the contents of the conversion file.
     """
     returnString = ""
     if bool(configuration.customFieldTypes):
@@ -1304,11 +1304,11 @@ def generateBaseSpicyConversionFunctions(configuration, scope):
     types used by the parser.
 
     Args:
-        configuration (Config): Parser configuration information.
-        scope (str): The C++ namespace that the conversion functions belong to.
+        configuration (Config): parser configuration information.
+        scope (str): the C++ namespace that the conversion functions belong to.
 
     Returns:
-        str: The spicy code to import the conversion functions.
+        str: the spicy code to import the conversion functions.
     """
     returnString = ""
     if bool(configuration.customFieldTypes):
@@ -1323,11 +1323,11 @@ def _writeSpicyConfirmationFiles(analyzerFolder, entryPointName):
     provides the configuration information for the protocol parser to Spicy.
 
     Args:
-        analyzerFolder (str): Output folder path.
-        entryPointName (str): Name of the entry point Object for the parser.
+        analyzerFolder (str): output folder path.
+        entryPointName (str): name of the entry point object for the parser.
 
     Returns:
-        list: List of Spicy script files (*.spicy) generated by this function.
+        list: list of Spicy script files (*.spicy) generated by this function.
     """
     zeekConfirmationFile = "zeek_{}.spicy".format(utils.PROTOCOL_NAME.lower())
     data = {
@@ -1352,11 +1352,11 @@ def _writeConversionFiles(analyzerFolder, configuration):
     but will allow the parser to be built.
 
     Args:
-        analyzerFolder (str): Output folder path.
-        configuration (Config): Parser configuration information.
+        analyzerFolder (str): output folder path.
+        configuration (Config): parser configuration information.
 
     Returns:
-        list: List of Spicy script (*.spicy) and C++ (*.cc) files generated by
+        list: list of Spicy script (*.spicy) and C++ (*.cc) files generated by
             this function.
     """
     normalScope = utils.normalizedScope(utils.CONVERSION_SCOPE, "")
@@ -1388,10 +1388,10 @@ def _writeGenerateIDFiles(analyzerFolder):
     linking IDs within the parser.
 
     Args:
-        analyzerFolder (str): Output folder path.
+        analyzerFolder (str): output folder path.
 
     Returns:
-        list: List of Spicy script (*.spicy) and C++ (*.cc) files generated by
+        list: list of Spicy script (*.spicy) and C++ (*.cc) files generated by
             this function.
     """
     normalScope = utils.normalizedScope(utils.ID_SCOPE, "")
@@ -1416,11 +1416,11 @@ def determineTransportProtocols(configuration):
     on the protocol parser configuration.
 
     Args:
-        configuration (Config): Parser configuration information.
+        configuration (Config): parser configuration information.
 
     Returns:
-        list: List containing the transportation protocols from the set of
-            "TCP" and "UDP" used by the parser. This list may be empty.
+        list: list containing the transportation protocols from the set of
+            "TCP" and "UDP" used by the parser. this list may be empty.
     """
     returnValue = []
 
@@ -1438,17 +1438,17 @@ def _determineScopeImportLines(normalScope, crossScopeItems):
     previously determined inter-scope dependencies.
 
     Args:
-        normalScope (str): The normalized scope name being processed.
-        crossScopeItems (dict): A dictionary containing information about
-            cross-scope dependencies. The key represents the scope that has
-            dependencies. The value is dictionary with keys representing the
-            scopes where the dependencies reside. The values are dictionaries
+        normalScope (str): the normalized scope name being processed.
+        crossScopeItems (dict): a dictionary containing information about
+            cross-scope dependencies. the key represents the scope that has
+            dependencies. the value is dictionary with keys representing the
+            scopes where the dependencies reside. the values are dictionaries
             where the keys are a subset of "enum", "object", "custom", and
-            "id". The values of these dictionaries are sets with the actual
+            "id". the values of these dictionaries are sets with the actual
             dependency names.
 
     Returns:
-        str: The import statements needed for that scope.
+        str: the import statements needed for that scope.
     """
     additionalScopes = ""
     if normalScope in crossScopeItems:
@@ -1463,25 +1463,25 @@ def _writeSpicyScopeFiles(analyzerFolder, configuration, scope, normalScope, add
     parser.
 
     Args:
-        analyzerFolder (str): Output folder path.
-        configuration (Config): Parser configuration information.
-        scope (str): The non-normalized scope being processed.
-        normalScope (str): The normalized scope being processed.
-        additionalScopeImports (str): Additional import code lines to use.
-        entryPointScope (str): Scope of the entry point (top level Object)
+        analyzerFolder (str): output folder path.
+        configuration (Config): parser configuration information.
+        scope (str): the non-normalized scope being processed.
+        normalScope (str): the normalized scope being processed.
+        additionalScopeImports (str): additional import code lines to use.
+        entryPointScope (str): scope of the entry point (top level object)
             into the parser.
-        entryPointName (str): Name of the entry point Object for the parser.
-        objects (dict): Dictionary of all Objects for the parser broken down
+        entryPointName (str): name of the entry point object for the parser.
+        objects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
-        switches (dict): Dictionary of all Switches for the parser broken down
+        switches (dict): dictionary of all Switches for the parser broken down
             by scope, followed by the name of the Switch.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
 
     Returns:
-        list: List of Spicy script files (*.spicy) generated by this function.
+        list: list of Spicy script files (*.spicy) generated by this function.
     """
     entryPointClass = ""
     if scope == entryPointScope:
@@ -1513,17 +1513,17 @@ def _determineProtocolEventsString(normalScope, entryPointScope, entryPointName,
     generates one if needed.
 
     Args:
-        normalScope (str): The normalized scope being processed.
-        entryPointScope (str): Scope of the entry point (top level Object)
+        normalScope (str): the normalized scope being processed.
+        entryPointScope (str): scope of the entry point (top level object)
             into the parser.
-        entryPointName (str): Name of the entry point Object for the parser.
-        transportProtocols (list): List containing the transportation
+        entryPointName (str): name of the entry point object for the parser.
+        transportProtocols (list): list containing the transportation
             protocols from the set of "TCP" and "UDP" used by the parser.
-            This list may be empty.
-        configuration (Config): Parser configuration information.
+            this list may be empty.
+        configuration (Config): parser configuration information.
 
     Returns:
-        str: If an events string is needed, the event string. Otherwise, an
+        str: if an events string is needed, the event string. otherwise, an
             empty string.
     """
     if normalScope == utils.normalizedScope(utils.DEFAULT_SCOPE, ""):
@@ -1537,15 +1537,15 @@ def _determineEntryPointEventString(scope, normalScope, entryPointScope, entryPo
     current and generates one if needed.
 
     Args:
-        scope (str): The non-normalized scope being processed.
-        normalScope (str): The normalized scope being processed.
-        entryPointScope (str): Scope of the entry point (top level Object)
+        scope (str): the non-normalized scope being processed.
+        normalScope (str): the normalized scope being processed.
+        entryPointScope (str): scope of the entry point (top level object)
             into the parser.
-        entryPointName (str): Name of the entry point Object for the parser.
+        entryPointName (str): name of the entry point object for the parser.
 
     Returns:
-        str: If the entry point event string is needed, the event string.
-            Otherwise, an empty string.
+        str: if the entry point event string is needed, the event string.
+            otherwise, an empty string.
     """
     if scope == entryPointScope:
         return "export {}::{}s;\n".format(normalScope, entryPointName)
@@ -1558,13 +1558,13 @@ def _determineExportString(scopedObjects, normalScope):
     the necessary exports.
 
     Args:
-        scopedObjects (dict): Dictionary of all Objects for the parser in the
-            scope being processed. The key is the name of the object and the
+        scopedObjects (dict): dictionary of all Objects for the parser in the
+            scope being processed. the key is the name of the object and the
             value is the Object itself.
-        normalScope (str): The normalized scope being processed.
+        normalScope (str): the normalized scope being processed.
 
     Returns:
-        str: The export string needed for the scope.
+        str: the export string needed for the scope.
     """
     exportString = ""
     for object in scopedObjects:
@@ -1595,15 +1595,15 @@ def _determineObjectEventsString(scopedObjects, normalScope, bitfields):
     Determine the events string for objects in a particular scope.
 
     Args:
-        scopedObjects (dict): Dictionary of all Objects for the parser in the
-            scope being processed. The key is the name of the object and the
+        scopedObjects (dict): dictionary of all Objects for the parser in the
+            scope being processed. the key is the name of the object and the
             value is the Object itself.
-        normalScope (str): The normalized scope being processed.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+        normalScope (str): the normalized scope being processed.
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
 
     Returns:
-        str: The events string needed for the objects.
+        str: the events string needed for the objects.
     """
     objectEvents = ""
     for object in scopedObjects.values():
@@ -1618,25 +1618,25 @@ def _writeSpicyEventFiles(analyzerFolder, configuration, scope, normalScope, ent
     provides the events for the protocol parser to integrate Spicy with Zeek.
 
     Args:
-        analyzerFolder (str): Output folder path.
-        configuration (Config): Parser configuration information.
-        scope (str): The non-normalized scope being processed.
-        normalScope (str): The normalized scope being processed.
-        entryPointScope (str): Scope of the entry point (top level Object)
+        analyzerFolder (str): output folder path.
+        configuration (Config): parser configuration information.
+        scope (str): the non-normalized scope being processed.
+        normalScope (str): the normalized scope being processed.
+        entryPointScope (str): scope of the entry point (top level object)
             into the parser.
-        entryPointName (str): Name of the entry point Object for the parser.
-        additionalScopeImports (str): Additional import statements needed for
+        entryPointName (str): name of the entry point object for the parser.
+        additionalScopeImports (str): additional import statements needed for
             the scope being processed.
-        transportProtocols (list): List containing the transportation
+        transportProtocols (list): list containing the transportation
             protocols from the set of "TCP" and "UDP" used by the parser.
-            This list may be empty.
-        objects (dict): Dictionary of all Objects for the parser broken down
+            this list may be empty.
+        objects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
 
     Returns:
-        list: List of Spicy event files (*.evt) generated by this function.
+        list: list of Spicy event files (*.evt) generated by this function.
     """
     protocolEvents = _determineProtocolEventsString(normalScope, entryPointScope, entryPointName, transportProtocols, configuration)
 
@@ -1668,13 +1668,13 @@ def _writeSpicyEnumFiles(analyzerFolder, scope, enums):
     for the parser.
 
     Args:
-        analyzerFolder (str): Output folder path.
-        scope (str): The non-normalized scope being processed.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        analyzerFolder (str): output folder path.
+        scope (str): the non-normalized scope being processed.
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
 
     Returns:
-        list: List of Spicy script files (*.spicy) generated by this function.
+        list: list of Spicy script files (*.spicy) generated by this function.
     """
     enumScope = utils.normalizedScope(scope, "enum")
     if enumScope in enums:
@@ -1704,31 +1704,31 @@ def writeSpicyFiles(configuration, outRootFolder, crossScopeItems, bitfields, en
     - analyzer/*.evt
 
     Args:
-        configuration (Config): Parser configuration information.
-        outRootFolder (str): Output folder path.
-        crossScopeItems (dict): A dictionary containing information about
-            cross-scope dependencies. The key represents the scope that has
-            dependencies. The value is dictionary with keys representing the
-            scopes where the dependencies reside. The values are dictionaries
+        configuration (Config): parser configuration information.
+        outRootFolder (str): output folder path.
+        crossScopeItems (dict): a dictionary containing information about
+            cross-scope dependencies. the key represents the scope that has
+            dependencies. the value is dictionary with keys representing the
+            scopes where the dependencies reside. the values are dictionaries
             where the keys are a subset of "enum", "object", "custom", and
-            "id". The values of these dictionaries are sets with the actual
+            "id". the values of these dictionaries are sets with the actual
             dependency names.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
-        objects (dict): Dictionary of all Objects for the parser broken down
+        objects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        switches (dict): Dictionary of all Switches for the parser broken down
+        switches (dict): dictionary of all Switches for the parser broken down
             by scope, followed by the name of the Switch.
-        entryPointScope (str): Scope of the entry point (top level Object)
+        entryPointScope (str): scope of the entry point (top level object)
             into the parser.
-        entryPointName (str): Name of the entry point Object for the parser.
+        entryPointName (str): name of the entry point object for the parser.
 
     Returns:
-        (str, list): A tuple with the following values:
-            1. The path to the analyzer folder.
-            2. The list of *.spicy, *.cc, and *.evt files generated by this
+        (str, list): a tuple with the following values:
+            1. the path to the analyzer folder.
+            2. the list of *.spicy, *.cc, and *.evt files generated by this
                 function.
     """
     # Create basic spicy files
@@ -1763,9 +1763,9 @@ def writeLastCMakeFile(analyzerFolder, scriptFiles, sourceFiles):
     Generates and outputs the CMakeLists.txt file used to compile the parser.
 
     Args:
-        analyzerFolder (str): Output folder path.
-        scriptFiles (list): List of Zeek-related script files.
-        sourceFiles (list): List of Spicy-related source files.
+        analyzerFolder (str): output folder path.
+        scriptFiles (list): list of Zeek-related script files.
+        sourceFiles (list): list of Spicy-related source files.
     """
     # Create CMakeLists.txt file with all the sources and scripts
 
@@ -1784,32 +1784,32 @@ def writeParserFiles(configuration, outRootFolder, zeekTypes, zeekMainFileObject
     Generates and outputs all parser files via calls to subfunctions.
 
     Args:
-        configuration (Config): Parser configuration information.
-        outRootFolder (str): Output folder path.
-        zeekTypes (dict): Dictionary of Zeek Objects for the parser. The key
-            is the scope that the Object belongs to. The value is a dictionary
+        configuration (Config): parser configuration information.
+        outRootFolder (str): output folder path.
+        zeekTypes (dict): dictionary of Zeek objects for the parser. the key
+            is the scope that the Object belongs to. the value is a dictionary
             where the key is the logging structure that the object belongs to
             and the value is the object itself.
-        zeekMainFileObject (zeektypes.ZeekMain): Data and functions class
+        zeekMainFileObject (zeektypes.ZeekMain): data and functions class
             related to generating main.zeek.
-        crossScopeItems (dict): A dictionary containing information about
-            cross-scope dependencies. The key represents the scope that has
-            dependencies. The value is dictionary with keys representing the
-            scopes where the dependencies reside. The values are dictionaries
+        crossScopeItems (dict): a dictionary containing information about
+            cross-scope dependencies. the key represents the scope that has
+            dependencies. the value is dictionary with keys representing the
+            scopes where the dependencies reside. the values are dictionaries
             where the keys are a subset of "enum", "object", "custom", and
-            "id". The values of these dictionaries are sets with the actual
+            "id". the values of these dictionaries are sets with the actual
             dependency names.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
-        objects (dict): Dictionary of all Objects for the parser broken down
+        objects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        switches (dict): Dictionary of all Switches for the parser broken down
+        switches (dict): dictionary of all Switches for the parser broken down
             by scope, followed by the name of the Switch.
-        entryPointScope (str): Scope of the entry point (top level Object)
+        entryPointScope (str): scope of the entry point (top level object)
             into the parser.
-        entryPointName (str): Name of the entry point Object for the parser.
+        entryPointName (str): name of the entry point object for the parser.
     """
     # Create base folder
     os.makedirs(outRootFolder, exist_ok=True)
