@@ -26,7 +26,7 @@ class BitfieldField:
     """
     def __init__(self, name, description, fieldType, bits, scope = ""):
         """
-        Initialization function
+        Initialization function.
 
         Args:
             name (str): field name
@@ -73,7 +73,7 @@ class Bitfield:
     """
     def __init__(self, name, reference, notes, size):
         """
-        initialization function
+        Initialization function.
 
         Args:
             name (str): bitfield structure name.

@@ -22,7 +22,7 @@ class CustomType:
     """
     def __init__(self, name, interpretingFunction, returnType):
         """
-        Initialization function
+        Initialization function.
 
         Args:
             name (str): the name of the custom type that will be used in the

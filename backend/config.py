@@ -43,7 +43,7 @@ class Config:
         """
     def __init__(self):
         """
-        Basic initialization function
+        Basic initialization function.
         """
         self.protocol = ""
         self.scopes = []

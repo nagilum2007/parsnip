@@ -53,11 +53,11 @@ def loadFile(filePath):
     Loads a JSON file and returns the contents as a Python structure.
 
     Args:
-        filePath (str): Path to the JSON file to load.
+        filePath (str): path to the JSON file to load.
 
     Returns:
-        Any: Contents of the file as a Python structure. This is typically as
-            a list or dictionary.
+        Any: contents of the file as a Python structure. this is typically a
+             list or dictionary.
     """
     with open(filePath, "r") as file:
         contents = json.load(file)
@@ -68,12 +68,12 @@ def normalizedKey3(value1, value2, value3):
     Convenience function to generate a 3-value key used in the parser graph.
 
     Args:
-        value1 (str): First part of the key. Typically the item scope.
-        value2 (str): Second part of the key. Typically the item type.
-        value3 (str): Third part of the key. Typically the item name.
+        value1 (str): first part of the key. typically the item scope.
+        value2 (str): second part of the key. typically the item type.
+        value3 (str): third part of the key. typically the item name.
 
     Returns:
-        str: The key used in the parser graph.
+        str: the key used in the parser graph.
     """
     return "{}.{}.{}".format(value1, value2, value3)
 
@@ -84,20 +84,20 @@ def normalizedType(itemType, referenceScope, referenceType, elementType,
     is used to create a consistent label for elements of a graph.
 
     Args:
-        itemType (str): The item type.
-        referenceScope (str): The scope of the item.
-        referenceType (str): The name of the item being referenced.
-        elementType (str): The type of the elements when itemType is "list".
-        itemSize (str): The size of the item in bits.
-        isReference (bool): True if the item is a reference. Otherwise False.
-        userDefinedTypes (list): List of user-defined types associated with
+        itemType (str): the item type.
+        referenceScope (str): the scope of the item.
+        referenceType (str): the name of the item being referenced.
+        elementType (str): the type of the elements when itemType is "list".
+        itemSize (str): the size of the item in bits.
+        isReference (bool): True if the item is a reference. otherwise False.
+        userDefinedTypes (list): list of user-defined types associated with
             the parser.
 
     Returns:
-        (None|str, None|str, bool): A tuple with the following values:
+        (None|str, None|str, bool): a tuple with the following values:
             1. None or the normalized item type.
             2. None or the key for the item referenced.
-            3. Whether or not the item is a list.
+            3. whether or not the item is a list.
     """
     returnValue = ""
     denoteReference = False
@@ -160,21 +160,21 @@ def normalizedLabel(itemType, referenceScope, referenceType, elementType,
     A normalized label for an item.
 
     Args:
-        itemType (str): The item type.
-        referenceScope (str): The scope of the item.
-        referenceType (str): The name of the item being referenced.
-        elementType (str): The type of the elements when itemType is "list".
-        itemSize (str): The size of the item in bits.
-        itemName (str): The name of the item.
-        isReference (bool): True if the item is a reference. Otherwise False.
-        userDefinedTypes (list): List of user-defined types associated with
+        itemType (str): the item type.
+        referenceScope (str): the scope of the item.
+        referenceType (str): the name of the item being referenced.
+        elementType (str): the type of the elements when itemType is "list".
+        itemSize (str): the size of the item in bits.
+        itemName (str): the name of the item.
+        isReference (bool): True if the item is a reference. otherwise False.
+        userDefinedTypes (list): list of user-defined types associated with
             the parser.
 
     Returns:
-        (str, None|str, bool): A tuple with the following values:
-            1. The normalized label.
+        (str, None|str, bool): a tuple with the following values:
+            1. the normalized label.
             2. None or the key for the referenced item.
-            3. Whether or not the item is a list.
+            3. whether or not the item is a list.
     """
     returnType, returnReference, isList = \
         normalizedType(itemType, referenceScope, referenceType, elementType, itemSize,
@@ -189,11 +189,11 @@ def addUserTypeNode(userType, nodeInformation, metaData, userDefinedTypes):
     Adds a user type node to the graph.
 
     Args:
-        userType (str): The name of the type.
-        nodeInformation (dict): Node information dictionary to save the graph
+        userType (str): the name of the type.
+        nodeInformation (dict): node information dictionary to save the graph
             nodes to.
-        metaData (dict): Metadata information to attach to the node.
-        userDefinedTypes (list): List of user-defined types associated with
+        metaData (dict): metadata information to attach to the node.
+        userDefinedTypes (list): list of user-defined types associated with
             the parser.
     """
     label, _, _ = normalizedLabel("user", None, None, None, None, userType, False,
@@ -206,14 +206,14 @@ def _valueOrDefault(item, key, default):
     value.
 
     Args:
-        item (dict): The dictionary where the key may exist.
-        key (str): The key to find in the item.
-        default (Any): The value to return if the key doesn't exist in the
+        item (dict): the dictionary where the key may exist.
+        key (str): the key to find in the item.
+        default (Any): the value to return if the key doesn't exist in the
             item.
 
     Returns:
-        Any: The value of the key in the item if it exists, otherwise the
-            supplied default value.
+        Any: the value of the key in the item if it exists, otherwise the
+             supplied default value.
     """
     if hasattr(item, key):
         return getattr(item, key)
@@ -225,12 +225,12 @@ def getItemName(itemScope, item, itemType):
     Provides the name of an item.
 
     Args:
-        itemScope (str): The scope of the item.
-        item (Any): The item to get the name of.
-        itemType (str): The item type.
+        itemScope (str): the scope of the item.
+        item (Any): the item to get the name of.
+        itemType (str): the item type.
 
     Returns:
-        _type_: _description_
+        str: the item name.
     """
     return item.name
 
@@ -239,17 +239,17 @@ def addItemNode(itemScope, item, itemType, nodeInformation, metaData, userDefine
     Add an item node to the graph.
 
     Args:
-        itemScope (str): The scope of the item.
-        item (Any): The item to add as a node.
-        itemType (str): The item type.
-        nodeInformation (dict): Node information dictionary to save the graph
+        itemScope (str): the scope of the item.
+        item (Any): the item to add as a node.
+        itemType (str): the item type.
+        nodeInformation (dict): node information dictionary to save the graph
             nodes to.
-        metaData (dict): Metadata information to attach to the node.
-        userDefinedTypes (list): List of user-defined types associated with
+        metaData (dict): metadata information to attach to the node.
+        userDefinedTypes (list): list of user-defined types associated with
             the parser.
 
     Returns:
-        str: The name of the item added.
+        str: the name of the item added.
     """
     name = getItemName(itemScope, item, itemType)
     if metaData is None:
@@ -267,11 +267,11 @@ def normalizedKey2(value1, value2):
     Convenience function to generate a 2-value key used in the parser graph.
 
     Args:
-        value1 (str): First part of the key. Typically the item's parent.
-        value2 (str): Second part of the key. Typically the item name.
+        value1 (str): first part of the key. typically the item's parent.
+        value2 (str): second part of the key. typically the item name.
 
     Returns:
-        str: The key used in the parser graph.
+        str: the key used in the parser graph.
     """
     return "{}.{}".format(value1, value2)
 
@@ -280,16 +280,16 @@ def normalizedKey4(value1, value2, value3, value4):
     Convenience function to generate a 4-value key used in the parser graph.
 
     Args:
-        value1 (str): First part of the key. Typically the item's parent's
+        value1 (str): first part of the key. typically the item's parent's
             scope.
-        value2 (str): Second part of the key. Typically the item's parent's
+        value2 (str): second part of the key. typically the item's parent's
             type.
-        value3 (str): Third part of the key. Typically the item's parent's
+        value3 (str): third part of the key. typically the item's parent's
             name.
-        value4 (str): Forth part of the key. Typically the item name.
+        value4 (str): forth part of the key. typically the item name.
 
     Returns:
-        str: The key used in the parser graph.
+        str: the key used in the parser graph.
     """
     return "{}.{}.{}.{}".format(value1, value2, value3, value4)
 
@@ -299,18 +299,18 @@ def _addNodeItem(parentScope, parentType, parentName, item, storage,
     Add a field or dependency node to the graph.
 
     Args:
-        parentScope (str): The scope of the parent item.
-        parentType (str): The type of the parent item.
-        parentName (str): The name of the parent item.
-        item (Any): The item to process and add.
-        storage (dict): The dictionary to add the node information to.
-        userDefinedTypes (list): List of user-defined types associated with
+        parentScope (str): the scope of the parent item.
+        parentType (str): the type of the parent item.
+        parentName (str): the name of the parent item.
+        item (Any): the item to process and add.
+        storage (dict): the dictionary to add the node information to.
+        userDefinedTypes (list): list of user-defined types associated with
             the parser.
 
     Returns:
-        (str, str, str|None): A tuple with the following values:
-            1. The 3-value key for parent item.
-            2. The 4-value key for the item that was added.
+        (str, str, str|None): a tuple with the following values:
+            1. the 3-value key for parent item.
+            2. the 4-value key for the item that was added.
             3. None or the key for the item that was referenced.
     """
     labelName = normalizedKey2(parentName, item.name)
@@ -333,11 +333,11 @@ def _addConnection(source, destination, label, storage):
     Adds directional connection information for a single connection.
 
     Args:
-        source (str): The key that is the source node of the connection.
-        destination (str): The key that is the destination node of the
+        source (str): the key that is the source node of the connection.
+        destination (str): the key that is the destination node of the
             connection.
-        label (str): The label for the connection.
-        storage (list): The location to store the connection information.
+        label (str): the label for the connection.
+        storage (list): the location to store the connection information.
     """
     storage.append((source, destination, label))
 
@@ -346,9 +346,9 @@ def _addReferenceConnection(itemKey, referenceType, storage):
     Adds directional connection information for a single reference connection.
 
     Args:
-        itemKey (str): The key of the item that has a reference.
-        referenceType (str|None): The key of the item type that is referenced.
-        storage (list): The location to store the connection information.
+        itemKey (str): the key of the item that has a reference.
+        referenceType (str|None): the key of the item type that is referenced.
+        storage (list): the location to store the connection information.
     """
     if referenceType is not None:
         _addConnection(itemKey, referenceType, "reference", storage)
@@ -360,18 +360,18 @@ def addFieldNode(itemScope, itemType, itemName, field, fieldNameType,
     Adds a field node and related to connections to the graph.
 
     Args:
-        itemScope (str): The scope of the parent item.
-        itemType (str): The item type of the parent item.
-        itemName (str): The name of the parent item.
-        field (Any): The field to add.
-        fieldNameType (str): The type of the field to add.
-        nodeInformation (dict): Node information dictionary to save the graph
+        itemScope (str): the scope of the parent item.
+        itemType (str): the item type of the parent item.
+        itemName (str): the name of the parent item.
+        field (Any): the field to add.
+        fieldNameType (str): the type of the field to add.
+        nodeInformation (dict): node information dictionary to save the graph
             nodes to.
-        referenceInformation (list): Connection information of connections due
+        referenceInformation (list): connection information of connections due
             to types referenced by the objects.
-        fieldsInformation (list): Connection information of connections due to
-            Object fields.
-        userDefinedTypes (list): List of user-defined types associated with
+        fieldsInformation (list): connection information of connections due to
+            object fields.
+        userDefinedTypes (list): list of user-defined types associated with
             the parser.
     """
     parentKey, keyName, referenceType = _addNodeItem(itemScope, itemType,
@@ -389,17 +389,17 @@ def addDependencyNode(itemScope, itemType, itemName, dependency,
     Adds a dependency node and related connections to the graph.
 
     Args:
-        itemScope (str): The scope of the parent item.
-        itemType (str): The item type of the parent item.
-        itemName (str): The name of the parent item.
-        dependency (Any): The dependency to add
-        dependencyNodeInformation (dict): Graph node dictionary to save
+        itemScope (str): the scope of the parent item.
+        itemType (str): the item type of the parent item.
+        itemName (str): the name of the parent item.
+        dependency (Any): the dependency to add
+        dependencyNodeInformation (dict): graph node dictionary to save
             dependency nodes to.
-        dependencyReferenceInformation (list): Connection information of
+        dependencyReferenceInformation (list): connection information of
             connections related to the dependency nodes.
-        dependencyInformation (list): Connection information of connections
+        dependencyInformation (list): connection information of connections
             related to dependency fields.
-        userDefinedTypes (list): List of user-defined types associated with
+        userDefinedTypes (list): list of user-defined types associated with
             the parser.
     """
     parentKey, keyName, referenceType = _addNodeItem(itemScope, itemType,

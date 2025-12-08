@@ -35,10 +35,10 @@ def getTabString(tabs):
     multiplied by tabs.
 
     Args:
-        tabs (int): The number of tabs to generate the spaces for.
+        tabs (int): the number of tabs to generate the spaces for.
 
     Returns:
-        str: A string of spaces for the requested number of tabs.
+        str: a string of spaces for the requested number of tabs.
     """
     return SINGLE_TAB * tabs
 
@@ -74,11 +74,11 @@ def zeekTypeMapping(spicyType):
     Maps a Spicy Type to a Zeek Type.
 
     Args:
-        spicyType (str): The Spicy type to map.
+        spicyType (str): the Spicy type to map.
 
     Returns:
-        str: The Zeek type if the Spicy type maps to one, otherwise the Spicy
-            Type.
+        str: the Zeek type if the Spicy type maps to one, otherwise the Spicy
+            type.
     """
     if spicyType in spicyToZeek:
         return spicyToZeek[spicyType]
@@ -91,10 +91,10 @@ def commandNameToConst(commandName):
     Determines the normalized constant name for a command name.
 
     Args:
-        commandName (str): The command name to normalize as a constant.
+        commandName (str): the command name to normalize as a constant.
 
     Returns:
-        str: The normalized constant name for the command name.
+        str: the normalized constant name for the command name.
     """
     name = re.sub(r'(.)([A-Z][a-z]+)', r'\1_\2', commandName)
     return re.sub(r'([a-z0-9])([A-Z])', r'\1_\2', name)
@@ -104,10 +104,10 @@ def calculateColumn(nameLength):
     Determines the tab-aligned column for a given length.
 
     Args:
-        nameLength (int): The length to figure out the tab-aligned column for.
+        nameLength (int): the length to figure out the tab-aligned column for.
 
     Returns:
-        int: The tab-aligned column for the given length.
+        int: the tab-aligned column for the given length.
     """
     return ceil((nameLength + 1) / TAB_SIZE) * TAB_SIZE
 
@@ -117,11 +117,11 @@ def endingSpace(columns, nameLength):
     with the desired number of columns.
 
     Args:
-        columns (int): The target column.
-        nameLength (int): The length of the current name.
+        columns (int): the target column.
+        nameLength (int): the length of the current name.
 
     Returns:
-        str: The string of spaces to add to the end of a name to have it
+        str: the string of spaces to add to the end of a name to have it
             aligned with the desired number of columns.
     """
     return " " * (columns - nameLength)
@@ -132,11 +132,11 @@ def normalizedScope(scope, itemType):
     an item type.
 
     Args:
-        scope (str): The scope to normalize.
-        itemType (str): The type of item associated with the scope.
+        scope (str): the scope to normalize.
+        itemType (str): the type of item associated with the scope.
 
     Returns:
-        str: The normalized scope.
+        str: the normalized scope.
     """
     if scope == "general" or PROTOCOL_NAME.upper() == scope:
         if "enum" == itemType:
@@ -155,10 +155,10 @@ def loggingParentScope(scope):
     Provides the logging scope to associate with a given scope.
 
     Args:
-        scope (str): The scope to provide the logging scope for.
+        scope (str): the scope to provide the logging scope for.
 
     Returns:
-        str: The logging scope to use.
+        str: the logging scope to use.
     """
     if scope == "general" or PROTOCOL_NAME.upper() == scope:
         return "general"
@@ -174,23 +174,23 @@ def determineSpicyStringForAction(action, switch, inputs, actionColumn, customTy
     Determines and generates the Spicy code to use for an action.
 
     Args:
-        action (switches.SwitchAction): The action to create the Spicy code
+        action (switches.SwitchAction): the action to create the Spicy code
             for.
-        switch (switches.Switch): The switch the action is associated with.
-        inputs (list): The array of inputs. Input objects that are the inputs
-            for the switch.
-        actionColumn (int): The column to align the action to.
-        customTypes (dict): The dictionary of any custom types used by the
+        switch (switches.Switch): the switch the action is associated with.
+        inputs (list): the array of inputs. Input structures that are the
+            inputs for the switch.
+        actionColumn (int): the column to align the action to.
+        customTypes (dict): the dictionary of any custom types used by the
             parser.
-        bitfields (dict): Dictionary of all Bitfields for the parser
+        bitfields (dict): dictionary of all Bitfields for the parser
             broken down by scope, followed by the name of the Bitfield.
-        switches (dict): Dictionary of all Switches for the parser broken
+        switches (dict): dictionary of all Switches for the parser broken
             down by scope, followed by the name of the Switch.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
 
     Returns:
-        str: The spicy code to use for the action.
+        str: the spicy code to use for the action.
     """
     if "void" == action.type:
         return "{0} : void".format(endingSpace(actionColumn, 0))
@@ -227,17 +227,17 @@ def _returnIntegerType(itemType, size, columns, itemName):
     Generates the Spicy code to parse an integer type.
 
     Args:
-        itemType (str): Type of integer. Should be in ["int", "uint"].
-        size (int): The size of the integer. Should be in [8, 16, 24, 32, 64].
-        columns (int): The column to align the string to.
-        itemName (str): The variable name.
+        itemType (str): type of integer. should be in ["int", "uint"].
+        size (int): the size of the integer. should be in [8, 16, 24, 32, 64].
+        columns (int): the column to align the string to.
+        itemName (str): the variable name.
 
     Returns:
-        (str, str): A tuple with the following values:
-            1. The string to use for a variable declaration (if needed).
-            2. The string to use for doing conversions (if needed).
+        (str, str): a tuple with the following values:
+            1. the string to use for a variable declaration (if needed).
+            2. the string to use for doing conversions (if needed).
 
-            Both return values are empty if incorrect values are passed in.
+            both return values are empty if incorrect values are passed in.
     """
     if size in [8, 16, 32, 64]:
         return ("", itemType + str(size))
@@ -257,18 +257,18 @@ def _returnSpicyObjectType(itemType, enums, scope, referenceType, inputs):
     Generates the Spicy code to parse an Object or Enum.
 
     Args:
-        itemType (str): The type of item to process.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        itemType (str): the type of item to process.
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
-        scope (str): The normalized scope being processed.
-        referenceType (str): The name of the item being processed.
-        inputs (list): The array of inputs. Input objects that are the inputs
-            for the item.
+        scope (str): the normalized scope being processed.
+        referenceType (str): the name of the item being processed.
+        inputs (list): the array of inputs. Input structures that are the
+            inputs for the item.
 
     Returns:
-        (str, str): A tuple with the following values:
-            1. An empty string.
-            2. The string to use for the converting/processing the item in the
+        (str, str): a tuple with the following values:
+            1. an empty string.
+            2. the string to use for the converting/processing the item in the
                 Spicy code.
     """
     outputString = ""
@@ -293,6 +293,18 @@ def _returnSpicyObjectType(itemType, enums, scope, referenceType, inputs):
 
 # function for converting to time type
 def _returnTimeType(size):
+    """
+    Generates the Spicy code to parse a time type.
+
+    Args:
+        size (int): the size of the time type. should be 32.
+
+    Returns:
+        (str, str): a tuple with the following values:
+        1. an empty string.
+        2. The string to use for converting/processing the item in the Spicy
+            code.
+    """
     if size == 32:
         return ("", "uint32 &convert=cast<time>($$)")
     #elif size == 64:
@@ -306,12 +318,12 @@ def _returnFloatType(size):
     Generates the Spicy code to parse a float type.
 
     Args:
-        size (int): The size of the float type. Should be in [32, 64].
+        size (int): the size of the float type. should be in [32, 64].
 
     Returns:
-        (str, str): A tuple with the following values:
-            1. An empty string.
-            2. The string to use for converting the item (if one exists) in
+        (str, str): a tuple with the following values:
+            1. an empty string.
+            2. the string to use for converting the item (if one exists) in
                 the Spicy code.
     """
     if 32 == size:
@@ -327,12 +339,12 @@ def _returnAddrType(size):
     Generates the Spicy code to parse an address type.
 
     Args:
-        size (int): The size of the address. Should be in [32, 128].
+        size (int): the size of the address. should be in [32, 128].
 
     Returns:
-        (str, str): A tuple with the following values:
-            1. An empty string.
-            2. The string to use for converting the item (if one exists) in the
+        (str, str): a tuple with the following values:
+            1. an empty string.
+            2. the string to use for converting the item (if one exists) in the
                 Spicy code.
     """
     if size == 32:
@@ -348,16 +360,16 @@ def _returnBitsType(bitfields, scope, referenceType, columns):
     Generates the Spicy code to parse a Bitfield type.
 
     Args:
-        bitfields (dict): Dictionary of all Bitfields for the parser
+        bitfields (dict): dictionary of all Bitfields for the parser
             broken down by scope, followed by the name of the Bitfield.
-        scope (str): The normalized scope being processed.
-        referenceType (str): The name of the item being processed.
-        columns (int): The column to align the string to.
+        scope (str): the normalized scope being processed.
+        referenceType (str): the name of the item being processed.
+        columns (int): the column to align the string to.
 
     Returns:
-        (str, str): A tuple with the following values:
-            1. An empty string.
-            2. The string to use for processing the Bitfield in the Spicy code.
+        (str, str): a tuple with the following values:
+            1. an empty string.
+            2. the string to use for processing the Bitfield in the Spicy code.
     """
     # Have to get size from the reference
     reference = bitfields[scope][referenceType]
@@ -381,28 +393,28 @@ def _returnListType(itemName, elementType, referenceType, scope, size, inputs, c
     Generates the Spicy code to parse a List type.
 
     Args:
-        itemName (str): The variable name.
-        elementType (str): The type of the elements.
-        referenceType (str): The name of the item being processed.
-        scope (str): The normalized scope being processed.
-        size (int): The size (in bits) of the field if the associated type
+        itemName (str): the variable name.
+        elementType (str): the type of the elements.
+        referenceType (str): the name of the item being processed.
+        scope (str): the normalized scope being processed.
+        size (int): the size (in bits) of the field if the associated type
             requires a size.
-        inputs (list): The array of inputs. Input objects that are the inputs
-            for the item.
-        customTypes (dict): The dictionary of any custom types used by the
+        inputs (list): the array of inputs. Input structures that are the
+            inputs for the item.
+        customTypes (dict): the dictionary of any custom types used by the
             parser.
-        bitfields (dict): Dictionary of all Bitfields for the parser
+        bitfields (dict): dictionary of all Bitfields for the parser
             broken down by scope, followed by the name of the Bitfield.
-        switches (dict): Dictionary of all Switches for the parser broken
+        switches (dict): dictionary of all Switches for the parser broken
             down by scope, followed by the name of the Switch.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
-        until (dict): The until statement in dictionary format.
+        until (dict): the until statement in dictionary format.
 
     Returns:
-        (str, str): A tuple with the following values:
-            1. The string to use for a variable declaration (if needed).
-            2. The string to use for doing conversions (if needed).
+        (str, str): a tuple with the following values:
+            1. the string to use for a variable declaration (if needed).
+            2. the string to use for doing conversions (if needed).
     """
     varString, typeString = determineSpicyStringForType(itemName, elementType, None, referenceType, scope, size, inputs, None, 0, customTypes, bitfields, switches, enums)
     sizeString = ""
@@ -433,24 +445,24 @@ def _returnSwitchType(scope, referenceType, inputs, customTypes, bitfields, swit
     Generates the Spicy code to add a Switch type.
 
     Args:
-        scope (str): The normalized scope being processed.
-        referenceType (str): The name of the item being processed.
-        inputs (list): The array of inputs. Input objects that are the inputs
-            for the item. The first item is used as the primary input for the
-            Switch.
-        customTypes (dict): The dictionary of any custom types used by the
+        scope (str): the normalized scope being processed.
+        referenceType (str): the name of the item being processed.
+        inputs (list): the array of inputs. Input structures that are the
+            inputs for the item. the first item is used as the primary input
+            for the Switch.
+        customTypes (dict): the dictionary of any custom types used by the
             parser.
-        bitfields (dict): Dictionary of all Bitfields for the parser
+        bitfields (dict): dictionary of all Bitfields for the parser
             broken down by scope, followed by the name of the Bitfield.
-        switches (dict): Dictionary of all Switches for the parser broken
+        switches (dict): dictionary of all Switches for the parser broken
             down by scope, followed by the name of the Switch.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
 
     Returns:
-        (str, str): A tuple with the following values:
-            1. An empty string.
-            2. The string that represents the switch.
+        (str, str): a tuple with the following values:
+            1. an empty string.
+            2. the string that represents the switch.
     """
     reference = switches[scope][referenceType]
     outputString = "switch({0}) {{\n".format(inputs[0].getString())
@@ -472,33 +484,33 @@ def determineSpicyStringForType(itemName, itemType, elementType, referenceType, 
     Generates the Spicy code needed for a given type.
 
     Args:
-        itemName (str): The variable name.
-        itemType (str): The type of item to process.
-        elementType (str): The type of the elements if the itemType is "list".
-        referenceType (str): The name of the item being processed if the
+        itemName (str): the variable name.
+        itemType (str): the type of item to process.
+        elementType (str): the type of the elements if the itemType is "list".
+        referenceType (str): the name of the item being processed if the
             itemType or elementType is of "object", "enum", "bits", or
             "switch".
-        scope (str): The normalized scope being processed.
-        size (int): The size (in bits) of the field if the associated type
+        scope (str): the normalized scope being processed.
+        size (int): the size (in bits) of the field if the associated type
             requires a size.
-        inputs (list): The array of inputs. Input objects that are the inputs
-            for the item. The first item is used as the primary input for the
-            Switch.
-        until (dict): The until statement in dictionary format.
-        columns (int): The column to align the string to.
-        customTypes (dict): The dictionary of any custom types used by the
+        inputs (list): the array of inputs. Input structures that are the
+            inputs for the item. the first item is used as the primary input
+            for the Switch.
+        until (dict): the until statement in dictionary format.
+        columns (int): the column to align the string to.
+        customTypes (dict): the dictionary of any custom types used by the
             parser.
-        bitfields (dict): Dictionary of all Bitfields for the parser
+        bitfields (dict): dictionary of all Bitfields for the parser
             broken down by scope, followed by the name of the Bitfield.
-        switches (dict): Dictionary of all Switches for the parser broken
+        switches (dict): dictionary of all Switches for the parser broken
             down by scope, followed by the name of the Switch.
-        enums (dict): Dictionary of all Enums for the parser broken down
+        enums (dict): dictionary of all Enums for the parser broken down
             by scope, followed by the name of the Enum.
 
     Returns:
-        (str, str): A tuple with the following values:
-            1. The string to use for a variable declaration (if needed).
-            2. The string to use for doing conversions or processing (if needed).
+        (str, str): a tuple with the following values:
+            1. the string to use for a variable declaration (if needed).
+            2. the string to use for doing conversions or processing (if needed).
     """
     if itemType in ["uint", "int"]:
         return _returnIntegerType(itemType, size, columns, itemName)
@@ -519,7 +531,7 @@ def determineSpicyStringForType(itemName, itemType, elementType, referenceType, 
     elif "switch" == itemType:
         return _returnSwitchType(scope, referenceType, inputs, customTypes, bitfields, switches, enums)
     elif "time" == itemType: # added handler for time
-        return _returnTimeType(size)  # assumes 32-bit time in seconds    
+        return _returnTimeType(size)  # assumes 32-bit time in seconds
     elif itemType in customTypes:
         # See if it's custom type
         sizeInBytes = int(ceil(size / 8))
@@ -535,18 +547,18 @@ def getObject(referenceType, scopes, allObjects):
     reference type without knowing the scope the Object is in.
 
     Args:
-        referenceType (str): The name of the Object.
-        scopes (list): An array of strings with the scope names used within
+        referenceType (str): the name of the Object.
+        scopes (list): an array of strings with the scope names used within
             the parser.
-        allObjects (dict): Dictionary of all Objects for the parser broken
+        allObjects (dict): dictionary of all Objects for the parser broken
             down by scope, followed by the name of the Object.
 
     Returns:
-        (objects.Object|None, str|None): A tuple with the following values:
-            1. The Object that corresponds to referenceType if found.
-                Otherwise None.
-            2. The scope of the Object if found.
-                Otherwise None.
+        (objects.Object|None, str|None): a tuple with the following values:
+            1. the Object that corresponds to referenceType if found.
+                otherwise None.
+            2. the scope of the Object if found.
+                otherwise None.
     """
     referencedObject = None
     objectScope = None

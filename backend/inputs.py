@@ -12,23 +12,23 @@ class Input:
     This class is used to hold data related to inputs for an item.
 
     Settable class variables:
-        source: The source used for the input.
-        minus: The amount to subtract from the value of the source or "" for
+        source: the source used for the input.
+        minus: the amount to subtract from the value of the source or "" for
             none.
 
     Additional class variables:
-        minusInUse: Whether or not a minus value is in use.
-            Updated using the __init__ function.
+        minusInUse: whether or not a minus value is in use.
+            updated using the __init__ function.
     """
     def __init__(self, source, minus=""):
         """
-        Initialization Function
+        Initialization function.
 
         Args:
-            source (str): A string representing the variable containing the
+            source (str): a string representing the variable containing the
                 value to use for the input.
-            minus (str, optional): The amount to subtract from the value used
-                for the input or "" for 0. Defaults to "".
+            minus (str, optional): the amount to subtract from the value used
+                for the input or "" for 0. defaults to "".
         """
         self.source = source
         self.minus = minus
@@ -36,10 +36,11 @@ class Input:
 
     def equal(self, other):
         """
-        Checks to see if another Input is equal to the current Input.
+        Checks to see if another Input structure is equal to the current Input
+        structure.
 
         Args:
-            other (Input): The Input to compare against.
+            other (Input): the Input to compare against.
 
         Returns:
             bool: True if the inputs are considered equal, otherwise False.
@@ -49,10 +50,10 @@ class Input:
 
     def getString(self):
         """
-        Get the string version of the Input to use in the parser code.
+        Get the string version of the Input structure to use in the parser code.
 
         Returns:
-            str: The string to use in the parser code representing the Input.
+            str: the string to use in the parser code representing the Input.
         """
         outputString = self.source
         if self.minusInUse:
@@ -64,24 +65,24 @@ class Dependency:
     This class is used to hold data related to dependencies for an item.
 
     Settable class variables:
-        name: The name of the dependency used locally.
-        type: The type of the dpendency.
-        size: The size (in bits) of the dependency.
-        referenceType: The name of the dependency.
-        scope: The scope of the dependency.
+        name: the name of the dependency used locally.
+        type: the type of the dpendency.
+        size: the size (in bits) of the dependency.
+        referenceType: the name of the dependency.
+        scope: the scope of the dependency.
     """
     def __init__(self, name, type, size="", referenceType = "", scope = ""):
         """
-        Initialization Function
+        Initialization function.
 
         Args:
-            name (str): The name of the dependency used locally.
-            type (str): The type of the dependency.
-            size (str, optional): The size (in bits) of the dependency.
-                Defaults to "".
-            referenceType (str, optional): The name of the dependency.
-                Defaults to "".
-            scope (str, optional): The scope of the dependency. Defaults to "".
+            name (str): the name of the dependency used locally.
+            type (str): the type of the dependency.
+            size (str, optional): the size (in bits) of the dependency.
+                defaults to "".
+            referenceType (str, optional): the name of the dependency.
+                defaults to "".
+            scope (str, optional): the scope of the dependency. defaults to "".
         """
         self.name = name
         self.type = type
@@ -91,10 +92,11 @@ class Dependency:
 
     def equal(self, other):
         """
-        Checks to see if another Dependency is equal to the current Dependency.
+        Checks to see if another Dependency structure is equal to the current
+        Dependency structure.
 
         Args:
-            other (Dependency): The Dependency to compare against.
+            other (Dependency): the Dependency structure to compare against.
 
         Returns:
             bool: True if the inputs are considered equal, otherwise False.

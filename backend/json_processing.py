@@ -22,23 +22,23 @@ def loadFiles(rootFilePath, scopes):
     parser scope directories.
 
     Args:
-        rootFilePath (str): Path to the root directory where the scope
+        rootFilePath (str): path to the root directory where the scope
             directories are located.
-        scopes (list): List of scope names that have directories in the root
+        scopes (list): list of scope names that have directories in the root
             directory.
 
     Returns:
-        (dict, dict, dict, dict): A tuple with the following values:
-            1. A dictionary of Objects where the key is the scope and the
+        (dict, dict, dict, dict): a tuple with the following values:
+            1. a dictionary of Objects where the key is the scope and the
                 value is a dictionary where the key is the name of the Object
                 and the value is the Object itself.
-            2. A dictionary of Switches where the key is the scope and the
+            2. a dictionary of Switches where the key is the scope and the
                 value is a dictionary where the key is the name of the Switch
                 and the value is the Switch itself.
-            3. A dictionary of Bitfields where the key is the scope and the
+            3. a dictionary of Bitfields where the key is the scope and the
                 value is a dictionary where the key is the name of the
                 Bitfield and the value is the Bitfield itself.
-            4. A dictionary of Enums where the key is the scope and the
+            4. a dictionary of Enums where the key is the scope and the
                 value is a dictionary where the key is the name of the Enum
                 and the value is the Enum itself.
     """
@@ -74,16 +74,16 @@ def passThroughLink(switchName, objectField, scopes, allObjects, allSwitches, li
     switch is the only field in an object.
 
     Args:
-        switchName (str): The name of the switch to process.
-        objectField (objects.ObjectField): The ObjectField that references the
+        switchName (str): the name of the switch to process.
+        objectField (objects.ObjectField): the ObjectField that references the
             switch.
-        scopes (list): An array of strings with the scope names used within the
+        scopes (list): an array of strings with the scope names used within the
             parser.
-        allObjects (dict): Dictionary of all Objects for the parser broken down
+        allObjects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        allSwitches (dict): Dictionary of all Switches for the parser broken
+        allSwitches (dict): dictionary of all Switches for the parser broken
             down by scope, followed by the name of the Switch.
-        linkObjectField (objects.Link): The linking field to add.
+        linkObjectField (objects.Link): the linking field to add.
     """
     for scope in scopes:
         if switchName in allSwitches[utils.normalizedScope(scope, "")]:
@@ -114,13 +114,13 @@ def _getSwitchJson(spicyFieldName):
     object dependencies.
 
     Args:
-        spicyFieldName (str): The link ID field name to use as the switch
+        spicyFieldName (str): the link ID field name to use as the switch
             dependency.
 
     Returns:
-        (dict, dict): A tuple with the following values:
-            1. The JSON information to use as the dependency for Objects.
-            2. The JSON information to use as the dependency for Switches.
+        (dict, dict): a tuple with the following values:
+            1. the JSON information to use as the dependency for Objects.
+            2. the JSON information to use as the dependency for Switches.
     """
     objectDependencyJson =  {
         "name": "parentLinkId",
@@ -141,16 +141,16 @@ def _processNonUsageScope(switch, object, item, scope, objectField):
     Object in another scope.
 
     Args:
-        switch (switches.Switch): The switch to generate the field for.
-        object (objects.Object): The object the switch refers to.
-        item (switches.SwitchOption): The option within the switch that refers
-            to the Object.
-        scope (str): The scope the Object is in.
-        objectField (objects.ObjectField): The ObjectField that references the
+        switch (switches.Switch): the switch to generate the field for.
+        object (objects.Object): the object the switch refers to.
+        item (switches.SwitchOption): the option within the switch that refers
+            to the object.
+        scope (str): the scope the object is in.
+        objectField (objects.ObjectField): the ObjectField that references the
             switch.
 
     Returns:
-        objects.Link: The linking object to use.
+        objects.Link: the linking object to use.
     """
     spicyFieldName = switch.dependsOn.name[0].lower() + switch.dependsOn.name[1:] + "LinkID"
     linkObjectField = objects.Link(spicyFieldName, "parentLinkId", True)
@@ -172,23 +172,23 @@ def _processNonUsageScope(switch, object, item, scope, objectField):
 
 def getSwitchType(switchName, objectField, switchUsageScope, scopes, allObjects, allSwitches):
     """
-    Determines the type of switch that a Switch is.
+    Determines the type of switch that a switch structure is.
 
     Args:
-        switchName (str): The name of the Switch.
-        objectField (objects.ObjectField): The ObjectField that references the
+        switchName (str): the name of the Switch.
+        objectField (objects.ObjectField): the ObjectField that references the
             switch.
-        switchUsageScope (str): The scope the switch is being used in.
+        switchUsageScope (str): the scope the switch is being used in.
             i.e., the scope the parent Object is in.
-        scopes (list): An array of strings with the scope names used within the
+        scopes (list): an array of strings with the scope names used within the
             parser.
-        allObjects (dict): Dictionary of all Objects for the parser broken down
+        allObjects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        allSwitches (dict): Dictionary of all Switches for the parser broken
+        allSwitches (dict): dictionary of all Switches for the parser broken
             down by scope, followed by the name of the Switch.
 
     Returns:
-        str|None : The type of switch, one of the following values:
+        str|None : the type of switch, one of the following values:
             - "trivial"
             - "link"
             - "contained"
@@ -237,14 +237,14 @@ def getSwitchType(switchName, objectField, switchUsageScope, scopes, allObjects,
 
 def createDependencyFromJSON(dependency):
     """
-    Creates a new Dependency object from JSON Dependency information input.
+    Creates a new dependency structure from JSON dependency information input.
 
     Args:
-        dependency (dict): The dependency information in the Parsnip JSON
+        dependency (dict): the dependency information in the Parsnip JSON
             format.
 
     Returns:
-        inputs.Dependency: The dependency object.
+        inputs.Dependency: the dependency object.
     """
     if "referenceType" in dependency:
         newDependency = inputs.Dependency(dependency["name"], dependency["type"], 0, dependency["referenceType"], dependency["scope"])
@@ -254,14 +254,14 @@ def createDependencyFromJSON(dependency):
 
 def processEnumFile(file):
     """
-    Processes a Parsnip scoped Enum file.
+    Processes a Parsnip scoped enum file.
 
     Args:
-        file (str): The path to the Parsnip Enum file to process.
+        file (str): the path to the Parsnip enum file to process.
 
     Returns:
-        dict: A dictionary of the enums processed from the file where the keys
-            are the names of the enums and the values are the Enums objects.
+        dict: a dictionary of the enums processed from the file where the keys
+            are the names of the enums and the values are the enums structures.
     """
     enumObject = {}
     with open(file, "r+") as file:
@@ -287,18 +287,18 @@ def _processConditional(conditional, startingIndex):
     basic conditional or a complex conditional.
 
     Args:
-        conditional (dict): JSON Object (dictionary) version of the
+        conditional (dict): JSON object (dictionary) version of the
             conditional.
-        startingIndex (int): Starting index of the conditional. Used for
-            calculating offsets, particularly in complex conditionals. On
+        startingIndex (int): starting index of the conditional. used for
+            calculating offsets, particularly in complex conditionals. on
             initial call, this should be set to 0.
 
     Returns:
-        list: Array of token entries for the conditional. Each token entry is
+        list: array of token entries for the conditional. each token entry is
             a tuple with the following values:
-            1. Token Identifier.
-            2. String value.
-            3. (If Token Identifier is "indicator") Offset of indicator.
+            1. token identifier.
+            2. string value.
+            3. (if token identifier is "indicator") offset of indicator.
     """
     if "indicator" in conditional and "operator" in conditional and "value" in conditional:
         return _processRegularConditional(conditional, startingIndex)
@@ -316,16 +316,16 @@ def _processRegularConditional(conditional, startingIndex):
     statement.
 
     Args:
-        conditional (dict): JSON Object (dictionary) version of the
+        conditional (dict): JSON object (dictionary) version of the
             conditional.
-        startingIndex (int): Starting index of the conditional.
+        startingIndex (int): starting index of the conditional.
 
     Returns:
-        list: Array of token entries for the conditional. Each token entry is
+        list: array of token entries for the conditional. each token entry is
             a tuple with the following values:
-            1. Token Identifier.
-            2. String value.
-            3. (If Token Identifier is "indicator") Offset of indicator.
+            1. token identifier.
+            2. string value.
+            3. (if token identifier is "indicator") offset of indicator.
     """
     return [("indicator", conditional["indicator"], startingIndex + 4),
             ("space", " "),
@@ -338,18 +338,18 @@ def _processJoiningConditional(conditional, key, joiner, startingIndex):
     Generates a token string for conditionals involving "ands" or "ors".
 
     Args:
-        conditional (dict): JSON Object (dictionary) version of the
+        conditional (dict): JSON object (dictionary) version of the
             conditional.
-        key (str): The token identifier to use for the joiner string.
-        joiner (str): The string value to use for the joiner.
-        startingIndex (int): Starting index of the conditional.
+        key (str): the token identifier to use for the joiner string.
+        joiner (str): the string value to use for the joiner.
+        startingIndex (int): starting index of the conditional.
 
     Returns:
-        list: Array of token entries for the conditional. Each token entry is
+        list: array of token entries for the conditional. each token entry is
             a tuple with the following values:
-            1. Token Identifier.
-            2. String value.
-            3. (If Token Identifier is "indicator") Offset of indicator.
+            1. token identifier.
+            2. string value.
+            3. (if token identifier is "indicator") offset of indicator.
     """
     returnValue = []
     if startingIndex > 0:
@@ -373,30 +373,29 @@ def processConditional(conditional):
     Generates a token string for a conditional from a Parsnip JSON file.
 
     Args:
-        conditional (dict): JSON Object (dictionary) version of the
+        conditional (dict): JSON object (dictionary) version of the
             conditional.
 
     Returns:
-        list: Array of token entries for the conditional. Each token entry is
+        list: array of token entries for the conditional. each token entry is
             a tuple with the following values:
-            1. Token Identifier.
-            2. String value.
-            3. (If Token Identifier is "indicator") Offset of indicator.
+            1. token identifier.
+            2. string value.
+            3. (if Token Identifier is "indicator") offset of indicator.
     """
     return _processConditional(conditional, 0)
 
 def processObjectsFile(file, scope):
     """
-    Processes a Parsnip scoped Object file.
+    Processes a Parsnip scoped object file.
 
     Args:
-        file (str): The path to the Parsnip Object file to process.
-        scope (str): The non-normalized scope being processed.
+        file (str): the path to the Parsnip object file to process.
+        scope (str): the non-normalized scope being processed.
 
     Returns:
-        dict: A dictionary of the objects processed from the file where the
-            keys are the names of the objects and the values are the Objects
-            objects.
+        dict: a dictionary of the objects processed from the file where the
+            keys are the names of the objects and the values are the objects.
     """
     objectsDictionary = {}
     with open(file, "r+") as file:
@@ -455,15 +454,15 @@ def processObjectsFile(file, scope):
 
 def processSwitchFile(file):
     """
-    Processes a Parsnip scoped Switch file.
+    Processes a Parsnip scoped switch file.
 
     Args:
-        file (str): The path to the Parsnip Switch file to process.
+        file (str): the path to the Parsnip switch file to process.
 
     Returns:
-        dict: A dictionary of the switches processed from the file where the
+        dict: a dictionary of the switches processed from the file where the
             keys are the names of the switches and the values are the
-            Switches objects.
+            switch structures.
     """
     switchDictionary = {}
     with open(file, "r+") as file:
@@ -516,15 +515,15 @@ def processSwitchFile(file):
 
 def processBitfieldFile(file):
     """
-    Processes a Parsnip scoped Bitfield file.
+    Processes a Parsnip scoped bitfield file.
 
     Args:
-        file (str): The path to the Parsnip Bitfield file to process.
+        file (str): the path to the Parsnip bitfield file to process.
 
     Returns:
-        dict: A dictionary of the bitfields processed from the file where the
+        dict: a dictionary of the bitfields processed from the file where the
             keys are the names of the bitfields and the values are the
-            Bitfield objects.
+            bitfield structures.
     """
     bitfieldDictionary = {}
     with open(file, "r+") as file:
@@ -548,18 +547,18 @@ def processBitfieldFile(file):
 
 def _processBasicType(zeekFields, zeekField, object, field, type):
     """
-    Processes a Parsnip Object field and adds information about that field to
+    Processes a Parsnip object field and adds information about that field to
     a list of fields for the Zeek part of the parser.
 
     Args:
-        zeekFields (list): Array of zeektypes.ZeekField objects to add the
+        zeekFields (list): array of zeektypes.ZeekField objects to add the
             information to.
-        zeekField (zeektypes.ZeekField): The ZeekField to initialize and add to
-            the zeekFields.
-        object (objects.Object): The object the field being processed belongs
+        zeekField (zeektypes.ZeekField): the ZeekField to initialize and add to
+            the zeekFields list.
+        object (objects.Object): the object the field being processed belongs
             to.
-        field (objects.ObjectField): The ObjectField that is being processed.
-        type (str): The Zeek type of the field.
+        field (objects.ObjectField): the ObjectField that is being processed.
+        type (str): the Zeek type of the field.
     """
     zeekField.name = utils.commandNameToConst(object.name).lower() + "_" + utils.commandNameToConst(field.name).lower()
     zeekField.type =  type
@@ -568,22 +567,22 @@ def _processBasicType(zeekFields, zeekField, object, field, type):
 
 def _processCustomType(zeekFields, zeekField, object, field, customFieldTypes):
     """
-    Processes a Parsnip Object custom type field and adds information about
+    Processes a Parsnip object custom type field and adds information about
     that field to a list of fields for the Zeek part of the parser.
 
     Args:
-        zeekFields (list): Array of zeektypes.ZeekField objects to add the
+        zeekFields (list): array of zeektypes.ZeekField objects to add the
             information to.
-        zeekField (zeektypes.ZeekField): The ZeekField to initialize and add
-            to the zeekFields.
-        object (objects.Object): The object the field being processed belongs
+        zeekField (zeektypes.ZeekField): the ZeekField to initialize and add
+            to the zeekFields list.
+        object (objects.Object): the Object the field being processed belongs
             to.
-        field (objects.ObjectField): The ObjectField that is being processed.
-        customFieldTypes (set): Set of tuples with the key being the
+        field (objects.ObjectField): the ObjectField that is being processed.
+        customFieldTypes (set): set of tuples with the key being the
             user-defined custom type name and the tuple consisting of:
-            the user-defined custom type name, the conversion function name
-            used to convert the custom type, and the return type of the
-            conversion function.
+                1. the user-defined custom type name,
+                2. the conversion function name used to convert the custom type,
+                3. the return type of the conversion function.
     """
     _processBasicType(zeekFields, zeekField, object, field, utils.zeekTypeMapping(customFieldTypes[field.type].returnType))
 
@@ -605,27 +604,27 @@ def _processSpicyType(zeekFields, zeekField, object, field):
 
 def _processSwitchAction(type, action, zeekFields, object, linkingFields, scope, scopes, allObjects, zeekObjects, zeekMainFileObject):
     """
-    Processes a Parnsip Switch Action and adds information about that field to
+    Processes a Parnsip switch action and adds information about that field to
     a list of fields for the Zeek part of the parser.
 
     Args:
-        type (str): Switch type.
-        action (switches.SwitchAction): The switch action to process.
-        zeekFields (list): Array of zeektypes.ZeekField objects to add the
+        type (str): switch type.
+        action (switches.SwitchAction): the switch action to process.
+        zeekFields (list): array of zeektypes.ZeekField objects to add the
             information to.
-        object (objects.Object): The object the switch action being processed
+        object (objects.Object): the object the switch action being processed
             belongs to.
-        linkingFields (list): Array of zeektypes.ZeekField objects
+        linkingFields (list): array of zeektypes.ZeekField objects
             representing fields that link to other fields.
-        scope (str): The non-normalized scope being processed.
-        scopes (list): An array of strings with the scope names used within the
+        scope (str): the non-normalized scope being processed.
+        scopes (list): an array of strings with the scope names used within the
             parser.
-        allObjects (dict): Dictionary of all Objects for the parser broken down
+        allObjects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        zeekObjects (dict): Dictionary of Zeek Objects for the parser. The
+        zeekObjects (dict): dictionary of Zeek Objects for the parser. the
             key is the logging structure that the object belongs to and the
             value is the object itself.
-        zeekMainFileObject (zeektypes.ZeekMain): Data and functions class
+        zeekMainFileObject (zeektypes.ZeekMain): data and functions class
             related to generating main.zeek.
     """
     if action.type == "object":
@@ -644,28 +643,28 @@ def _processSwitchAction(type, action, zeekFields, object, linkingFields, scope,
 
 def _processSwitchType(zeekFields, linkingFields, object, field, scope, scopes, allObjects, allSwitches, zeekObjects, zeekMainFileObject):
     """
-    Processes a Parsnip Switch and adds information about that field to a list
+    Processes a Parsnip switch and adds information about that field to a list
     of fields for the Zeek part of the parser.
 
     Args:
-        zeekFields (list): Array of zeektypes.ZeekField objects to add the
+        zeekFields (list): array of zeektypes.ZeekField objects to add the
             information to.
-        linkingFields (list): Array of zeektypes.ZeekField objects
+        linkingFields (list): array of zeektypes.ZeekField objects
             representing fields that link to other fields.
-        object (objects.Object): The object the switch action being processed
+        object (objects.Object): the object the switch action being processed
             belongs to.
-        field (objects.ObjectField): The ObjectField that is being processed.
-        scope (str): The non-normalized scope being processed.
-        scopes (list): An array of strings with the scope names used within the
+        field (objects.ObjectField): the ObjectField that is being processed.
+        scope (str): the non-normalized scope being processed.
+        scopes (list): an array of strings with the scope names used within the
             parser.
-        allObjects (dict): Dictionary of all Objects for the parser broken down
+        allObjects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        allSwitches (dict): Dictionary of all Switches for the parser broken
+        allSwitches (dict): dictionary of all Switches for the parser broken
             down by scope, followed by the name of the Switch.
-        zeekObjects (dict): Dictionary of Zeek Objects for the parser. The
+        zeekObjects (dict): dictionary of Zeek Objects for the parser. the
             key is the logging structure that the object belongs to and the
             value is the object itself.
-        zeekMainFileObject (zeektypes.ZeekMain): Data and functions class
+        zeekMainFileObject (zeektypes.ZeekMain): data and functions class
             related to generating main.zeek.
     """
     switchType = getSwitchType(field.referenceType, field, scope, scopes, allObjects, allSwitches)
@@ -718,19 +717,19 @@ def _processSwitchType(zeekFields, linkingFields, object, field, scope, scopes, 
 
 def _processBitsType(zeekFields, object, field, bitfields, scope, generalScope):
     """
-    Processes a Parsnip Bitfield and adds information about that field to a
+    Processes a Parsnip bitfield and adds information about that field to a
     list of fields for the Zeek part of the parser.
 
     Args:
-        zeekFields (list): Array of zeektypes.ZeekField objects to add the
+        zeekFields (list): array of zeektypes.ZeekField objects to add the
             information to.
-        object (objects.Object): The object the bitfields field being processed
+        object (objects.Object): the object the bitfields field being processed
             belongs to.
-        field (objects.ObjectField): The ObjectField that is being processed.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+        field (objects.ObjectField): the ObjectField that is being processed.
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
-        scope (str): The non-normalized scope being processed.
-        generalScope (str): The default/general scope.
+        scope (str): the non-normalized scope being processed.
+        generalScope (str): the default/general scope.
     """
     referenceType = field.referenceType
     fieldZeekName = utils.commandNameToConst(object.name).lower() + "_" +  utils.commandNameToConst(field.name).lower()
@@ -754,17 +753,17 @@ def _processObjectLink(logStructure, zeekObjects, scope, zeekMainFileObject):
     Gets or adds a zeekObject and record to a Zeek Log structure.
 
     Args:
-        logStructure (str): Name of the logging structure (a scope) to add the
+        logStructure (str): name of the logging structure (a scope) to add the
             link to.
-        zeekObjects (dict): Dictionary of Zeek Objects for the parser. The
+        zeekObjects (dict): dictionary of Zeek objects for the parser. the
             key is the logging structure that the object belongs to and the
             value is the object itself.
         scope (str): The scope the link belongs to.
-        zeekMainFileObject (zeektypes.ZeekMain): Data and functions class
+        zeekMainFileObject (zeektypes.ZeekMain): data and functions class
             related to generating main.zeek.
 
     Returns:
-        zeektypes.ZeekRecord: The ZeekRecord that already exsisted or was
+        zeektypes.ZeekRecord: the ZeekRecord that already exsisted or was
         added.
     """
     if logStructure not in zeekObjects[utils.normalizedScope(scope, "object")]:
@@ -782,14 +781,14 @@ def _processLinkingField(referencedObject, linkingFields, zeekObjects, scope, ze
     the zeekObject.
 
     Args:
-        referencedObject (objects.Object): The Object being referenced.
-        linkingFields (list): The array of ZeekField objects to add the
+        referencedObject (objects.Object): the Object being referenced.
+        linkingFields (list): the array of ZeekField objects to add the
             linking field to.
-        zeekObjects (dict): Dictionary of Zeek Objects for the parser. The
+        zeekObjects (dict): dictionary of Zeek objects for the parser. the
             key is the logging structure that the object belongs to and the
             value is the object itself.
-        scope (str): The scope the link belongs to.
-        zeekMainFileObject (zeektypes.ZeekMain): Data and functions class
+        scope (str): the scope the link belongs to.
+        zeekMainFileObject (zeektypes.ZeekMain): data and functions class
             related to generating main.zeek.
     """
     linkFieldName = utils.commandNameToConst(referencedObject.name).lower() + "_link_id"
@@ -801,28 +800,28 @@ def _processLinkingField(referencedObject, linkingFields, zeekObjects, scope, ze
 
 def _processObjectType(field, linkingFields, object, allObjects, generalScope, scope, scopes, scopedObjects, zeekObjects, zeekMainFileObject):
     """
-    Processes a Parsnip Object and adds information about that field to a
+    Processes a Parsnip object and adds information about that field to a
     list of fields for the Zeek part of the parser.
 
     Args:
-        field (objects.ObjectField): The ObjectField that is being processed.
-        linkingFields (list): The array of ZeekField objects to add any
+        field (objects.ObjectField): the ObjectField that is being processed.
+        linkingFields (list): the array of ZeekField objects to add any
             necessary linking fields to.
-        object (objects.Object): The object the bitfields field being processed
+        object (objects.Object): the object the bitfields field being processed
             belongs to.
-        allObjects (dict): Dictionary of all Objects for the parser broken down
+        allObjects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        generalScope (str): The default/general scope.
-        scope (str): The non-normalized scope being processed.
-        scopes (list): An array of strings with the scope names used within the
+        generalScope (str): the default/general scope.
+        scope (str): the non-normalized scope being processed.
+        scopes (list): an array of strings with the scope names used within the
             parser.
-        scopedObjects (dict): Dictionary of all Objects for the parser in the
-            scope being processed. The key is the name of the object and the
+        scopedObjects (dict): dictionary of all Objects for the parser in the
+            scope being processed. the key is the name of the object and the
             value is the Object itself.
-        zeekObjects (dict): Dictionary of Zeek Objects for the parser. The
+        zeekObjects (dict): dictionary of Zeek objects for the parser. the
             key is the logging structure that the object belongs to and the
             value is the object itself.
-        zeekMainFileObject (zeektypes.ZeekMain): Data and functions class
+        zeekMainFileObject (zeektypes.ZeekMain): data and functions class
             related to generating main.zeek.
     """
     referencedObject = None
@@ -854,26 +853,26 @@ def _processObjectType(field, linkingFields, object, allObjects, generalScope, s
 
 def _processListType(zeekFields, field, linkingFields, object, scope, scopes, allObjects, zeekObjects, zeekMainFileObject):
     """
-    Processes a Parsnip List and adds information about that field to a
+    Processes a Parsnip list and adds information about that field to a
     list of fields for the Zeek part of the parser.
 
     Args:
-        zeekFields (list): Array of zeektypes.ZeekField objects to add the
+        zeekFields (list): array of zeektypes.ZeekField objects to add the
             information to.
-        field (objects.ObjectField): The ObjectField that is being processed.
-        linkingFields (list): The array of ZeekField objects to add any
+        field (objects.ObjectField): the ObjectField that is being processed.
+        linkingFields (list): the array of ZeekField objects to add any
             necessary linking fields to.
-        object (objects.Object): The object the bitfields field being processed
+        object (objects.Object): the object the bitfields field being processed
             belongs to.
-        scope (str): The non-normalized scope being processed.
-        scopes (list): An array of strings with the scope names used within the
+        scope (str): the non-normalized scope being processed.
+        scopes (list): an array of strings with the scope names used within the
             parser.
-        allObjects (dict): Dictionary of all Objects for the parser broken down
+        allObjects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        zeekObjects (dict): Dictionary of Zeek Objects for the parser. The
+        zeekObjects (dict): dictionary of Zeek objects for the parser. the
             key is the logging structure that the object belongs to and the
             value is the object itself.
-        zeekMainFileObject (zeektypes.ZeekMain): Data and functions class
+        zeekMainFileObject (zeektypes.ZeekMain): data and functions class
             related to generating main.zeek.
     """
     if field.elementType in utils.spicyToZeek:
@@ -903,8 +902,8 @@ def _linkScope(scope, zeekObjects):
     Adds linking information between two scopes if necessary.
 
     Args:
-        scope (str): The non-normalized scope being processed.
-        zeekObjects (dict): Dictionary of Zeek Objects for the parser. The
+        scope (str): the non-normalized scope being processed.
+        zeekObjects (dict): dictionary of Zeek objects for the parser. the
             key is the logging structure that the object belongs to and the
             value is the object itself.
 
@@ -920,27 +919,27 @@ def createZeekObjects(scopes, customFieldTypes, bitfields, allObjects, allSwitch
     Generates the Zeek objects for the parser.
 
     Args:
-        scopes (list): An array of strings with the scope names used within the
+        scopes (list): an array of strings with the scope names used within the
             parser.
-        customFieldTypes (set): Set of tuples with the key being the
+        customFieldTypes (set): set of tuples with the key being the
             user-defined custom type name and the tuple consisting of:
-            the user-defined custom type name, the conversion function name
-            used to convert the custom type, and the return type of the
-            conversion function.
-        bitfields (dict): Dictionary of all Bitfields for the parser broken
+                1. the user-defined custom type name,
+                2. the conversion function name used to convert the custom type,
+                3. and the return type of the conversion function.
+        bitfields (dict): dictionary of all Bitfields for the parser broken
             down by scope, followed by the name of the Bitfield.
-        allObjects (dict): Dictionary of all Objects for the parser broken down
+        allObjects (dict): dictionary of all Objects for the parser broken down
             by scope, followed by the name of the Object.
-        allSwitches (dict): Dictionary of all Switches for the parser broken
+        allSwitches (dict): dictionary of all Switches for the parser broken
             down by scope, followed by the name of the Switch.
 
 
     Returns:
-        (dict, zeektypes.ZeekMain): A tuple with the following values:
-            1. Dictionary of Zeek Objects for the parser. The
+        (dict, zeektypes.ZeekMain): a tuple with the following values:
+            1. dictionary of Zeek Objects for the parser. The
             key is the logging structure that the object belongs to and the
             value is the object itself.
-            2. Data and functions class related to generating main.zeek.
+            2. data and functions class related to generating main.zeek.
     """
     zeekObjects = {}
     zeekMainFileObject = zeektypes.ZeekMain()

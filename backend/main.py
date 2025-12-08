@@ -18,7 +18,7 @@ def _updateUtilValues(configuration):
     Updates the global variables available in the Utils module.
 
     Args:
-        configuration (Config): Parser configuration information.
+        configuration (Config): parser configuration information.
     """
     utils.PROTOCOL_NAME = configuration.protocol
     utils.USES_LAYER_2 = configuration.usesLayer2
@@ -31,9 +31,9 @@ def _parseArgs():
     displays the help menu and exits the program.
 
     Returns:
-        (str, str): A tuple with the following values:
-            1. The input directory path parsed from the command line arguments.
-            2. The output directory path parsed from the command line arguments.
+        (str, str): a tuple with the following values:
+            1. the input directory path parsed from the command line arguments.
+            2. the output directory path parsed from the command line arguments.
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("inputRootDirectory", type=str, help="Path to folder with '{0}' folder".format(utils.DEFAULT_SCOPE))
@@ -49,38 +49,38 @@ def _generateData(inRootFolder, configuration, entryPointScope, entryPointName, 
     provided in the input folder.
 
     Args:
-        inRootFolder (str): Path to the root input folder.
-        configuration (Config): Parser configuration information.
-        entryPointScope (str): Scope of the entry point (top level Object)
+        inRootFolder (str): path to the root input folder.
+        configuration (Config): parser configuration information.
+        entryPointScope (str): scope of the entry point (top level Object)
             into the parser.
-        entryPointName (str): Name of the entry point Object for the parser.
-        entryPointKey (str): The name of the graph node for the entry point
+        entryPointName (str): name of the entry point Object for the parser.
+        entryPointKey (str): the name of the graph node for the entry point
             Object.
 
     Returns:
-        (dict, zeektypes.ZeekMain, dict, dict, dict, dict, dict): A tuple with
+        (dict, zeektypes.ZeekMain, dict, dict, dict, dict, dict): a tuple with
             the following values:
-            1. Dictionary of Zeek Objects for the parser. The key is the
+            1. dictionary of Zeek Objects for the parser. the key is the
                 logging structure that the object belongs to and the value is
                 the object itself.
-            2. Data and functions class related to generating main.zeek.
-            3. A dictionary containing information about cross-scope
-                dependencies. The key represents the scope that has
-                dependencies. The value is dictionary with keys representing
-                the scopes where the dependencies reside. The values are
+            2. data and functions class related to generating main.zeek.
+            3. a dictionary containing information about cross-scope
+                dependencies. the key represents the scope that has
+                dependencies. the value is dictionary with keys representing
+                the scopes where the dependencies reside. the values are
                 dictionaries where the keys are a subset of "enum", "object",
-                "custom", and "id". The values of these dictionaries are sets
+                "custom", and "id". the values of these dictionaries are sets
                 with the actual dependency names.
-            4. A dictionary of Objects where the key is the scope and the
+            4. a dictionary of Objects where the key is the scope and the
                 value is a dictionary where the key is the name of the Object
                 and the value is the Object itself.
-            5. A dictionary of Switches where the key is the scope and the
+            5. a dictionary of Switches where the key is the scope and the
                 value is a dictionary where the key is the name of the Switch
                 and the value is the Switch itself.
-            6. A dictionary of Bitfields where the key is the scope and the
+            6. a dictionary of Bitfields where the key is the scope and the
                 value is a dictionary where the key is the name of the
                 Bitfield and the value is the Bitfield itself.
-            7. A dictionary of Enums where the key is the scope and the
+            7. a dictionary of Enums where the key is the scope and the
                 value is a dictionary where the key is the name of the Enum
                 and the value is the Enum itself.
     """
@@ -111,14 +111,14 @@ def determineEntryPointInformation(configuration):
     configuration.
 
     Args:
-        configuration (Config): Parser configuration information.
+        configuration (Config): parser configuration information.
 
     Returns:
-        (bool, str, str, str): A tuple with the following values:
-            1. Whether or not the information was sucessfully determined.
-            2. The scope of the entry point (if successful).
-            3. The name of the entry point Object (if successful).
-            4. The key for the entry point node in the graph (if successful).
+        (bool, str, str, str): a tuple with the following values:
+            1. whether or not the information was sucessfully determined.
+            2. the scope of the entry point (if successful).
+            3. the name of the entry point Object (if successful).
+            4. the key for the entry point node in the graph (if successful).
     """
     entryPointParts = configuration.entryPoint.split(".")
     if 2 != len(entryPointParts):

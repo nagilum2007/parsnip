@@ -17,24 +17,24 @@ class Link:
     This class stores data related to a linking field.
 
     Settable class variables:
-        name: Name of link, used as the variable name in the parser.
-        parameterName: Name of the parameter.
-        isEndLink: Whether or not this link is used to generate an ID.
-            If True, the parameter name should be used. If False, then a
+        name: name of link, used as the variable name in the parser.
+        parameterName: name of the parameter.
+        isEndLink: whether or not this link is used to generate an ID.
+            if True, the parameter name should be used. if False, then a
             generated ID should be used.
     """
     def __init__(self, name, parameterName, isEndLink = False):
         """
-        Initialization Function
+        Initialization function.
 
         Args:
-            name (str): The name of the link. Used as the variable name in the
+            name (str): the name of the link. used as the variable name in the
                 parser.
-            parameterName (str): The value to set the link variable to if
+            parameterName (str): the value to set the link variable to if
                 isEndLink is True.
             isEndLink (bool, optional): True if the variable should be set to
                 parameter name, otherwise False if the variable should be a
-                generated ID. Defaults to False.
+                generated ID. defaults to False.
         """
         self.name = name
         self.parameterName = parameterName
@@ -45,37 +45,37 @@ class ObjectField:
     This class stores data related to an individual Object Field.
 
     Settable class variables:
-        name: Field name.
-        description: Field description.
-        notes: Developer Notes.
-        type: Field Type.
-        referenceType: Name of the of the referenced structure if type is of
+        name: field name.
+        description: field description.
+        notes: developer Notes.
+        type: field yype.
+        referenceType: name of the of the referenced structure if type is of
             "bits", "enum", "object", "switch", or "list".
-        elementType: The type of structure being referenced if type is "list".
-        size: The size (in bits) of the field if the associated type requires
+        elementType: the type of structure being referenced if type is "list".
+        size: the size (in bits) of the field if the associated type requires
             a size.
-        until: Holds information about a Parsnip "Until" statement related to
-            this field if such information exists. Otherwise None.
-        scope: Scope of the referenced type.
-        conditional: Array of conditional statements related to this field if
-            such information exists. Otherwise an empty list.
-        endianness: The endianness of this field. Must be set to "big" or
+        until: holds information about a Parsnip "Until" statement related to
+            this field if such information exists. otherwise None.
+        scope: scope of the referenced type.
+        conditional: array of conditional statements related to this field if
+            such information exists. otherwise an empty list.
+        endianness: the endianness of this field. Must be set to "big" or
             "little".
 
     Additional class variables:
-        inputs: Array of Input objects.
-            Updated using the addInput class function.
+        inputs: array of Input structures.
+            updated using the addInput class function.
     """
     def __init__(self, name, description, type, scope = ""):
         """
-        Initialization Function
+        Initialization function.
 
         Args:
-            name (str): Field name.
-            description (str): Field description.
-            type (str): Field type.
-            scope (str, optional): Scope containing the field type.
-                Defaults to "" (default scope).
+            name (str): field name.
+            description (str): field description.
+            type (str): field type.
+            scope (str, optional): scope containing the field type.
+                defaults to "" (default scope).
         """
         self.name = name
         self.description = description
@@ -92,11 +92,11 @@ class ObjectField:
 
     def addInput(self, input):
         """
-        Adds an Input object to the internal list of inputs if it does not
+        Adds an Input structure to the internal list of inputs if it does not
         already exist.
 
         Args:
-            input (inputs.Input): The Input object to add.
+            input (inputs.Input): the Input structure to add.
         """
         for existingInput in self.inputs:
             if existingInput.equal(input):
@@ -110,21 +110,21 @@ class ObjectField:
         instance using the data stored within it.
 
         Args:
-            columns (int): The initial column offset for the output string.
-            customTypes (dict): The dictionary of any custom types used by the
+            columns (int): the initial column offset for the output string.
+            customTypes (dict): the dictionary of any custom types used by the
                 parser.
-            bitfields (dict): Dictionary of all Bitfields for the parser
+            bitfields (dict): dictionary of all Bitfields for the parser
                 broken down by scope, followed by the name of the Bitfield.
-            switches (dict): Dictionary of all Switches for the parser broken
+            switches (dict): dictionary of all Switches for the parser broken
                 down by scope, followed by the name of the Switch.
-            enums (dict): Dictionary of all Enums for the parser broken down
+            enums (dict): dictionary of all Enums for the parser broken down
                 by scope, followed by the name of the Enum.
-            dependsOn (list): Array of variables passed in as dependencies.
-            fields (list): Array of all fields for the Object this field is
+            dependsOn (list): array of variables passed in as dependencies.
+            fields (list): array of all fields for the Object this field is
                 associated with.
 
         Returns:
-            str: A string to use within a Spicy parser representing this
+            str: a string to use within a Spicy parser representing this
                 ObjectField instance.
         """
         outputString = ""
@@ -173,63 +173,63 @@ class ObjectField:
 
 class Object:
     """
-    This class stores data related to an Object object.
+    This class stores data related to an Object.
 
     Settable class variables:
-        name: Object name.
-        reference: Object reference.
-            This should be a string providing information of where this Object
+        name: object name.
+        reference: object reference.
+            this should be a string providing information of where this Object
             definition comes from.
-            For example, "Specification Unit A, Section 2.5.1".
-        zeekStructure: Array holding logging structure information.
-        notes: Developer notes.
-        scope: The scope of the Object.
-        logIndependently: Whether or not the Object should be logged
+            for example, "Specification Unit A, Section 2.5.1".
+        zeekStructure: array holding logging structure information.
+        notes: developer notes.
+        scope: the scope of the Object.
+        logIndependently: whether or not the Object should be logged
             independently or as part of another structure.
-        referenceCount: The number of times this Object is referenced by other
+        referenceCount: the number of times this Object is referenced by other
             structures in the parser.
-        logWithParent: Whether or not the Object should be logged with a parent
-            structure (Object).
-        needsSpecificExport: Whether or not the Object needs a specific export
+        logWithParent: whether or not the Object should be logged with a parent
+            Object.
+        needsSpecificExport: whether or not the Object needs a specific export
             statement using the includedFields and excludedFields arrays.
 
     Additional class variables:
-        dependsOn: Array of dependencies for the Object.
-            Updated using the addDependency class function.
-        fields: Array of ObjectFields for the Object.
-            Updated using the addField class function.
-        column: Used for formatting text while generating a parser.
-            Updated using the addField class function.
-        longestField: Used for formatting text.
-            Keeps the length of the longest field name in fields.
-            Updated using the addField class function.
-        linkIds: Array of Linking IDs associated with this Object.
-            Updated using the addLinkField class function.
-        excludedFields: Array of ObjectField names that should be explicitly
+        dependsOn: array of dependencies for the Object.
+            updated using the addDependency class function.
+        fields: array of ObjectFields for the Object.
+            updated using the addField class function.
+        column: used for formatting text while generating a parser.
+            updated using the addField class function.
+        longestField: used for formatting text.
+            keeps the length of the longest field name in fields.
+            updated using the addField class function.
+        linkIds: array of Linking IDs associated with this Object.
+            updated using the addLinkField class function.
+        excludedFields: array of ObjectField names that should be explicitly
             excluded when importing the Object in other scopes.
-            Updated using the addExcludedField class function.
-        includedFields: Array of ObjectField names that should be explicitly
+            updated using the addExcludedField class function.
+        includedFields: array of ObjectField names that should be explicitly
             included when importing the Object in other scopes.
-            Updated using the addIncludedField class function.
+            updated using the addIncludedField class function.
     """
     def __init__(self, name, reference, notes, logIndependently, referenceCount, scope, logWithParent=False):
         """
-        Initialization Function
+        Initialization function.
 
         Args:
-            name (str): Object name.
-            reference (str): Object reference.
-                This should be a string providing information of where this
+            name (str): object name.
+            reference (str): object reference.
+                this should be a string providing information of where this
                 Object definition comes from.
-                For example, "Specification Unit A, Section 2.5.1".
-            notes (str): Developer notes.
-            logIndependently (bool): Whether or not the Object should be
+                for example, "Specification Unit A, Section 2.5.1".
+            notes (str): developer notes.
+            logIndependently (bool): whether or not the Object should be
                 logged independently or as part of another structure.
-            referenceCount (int): The number of times this Object is
+            referenceCount (int): the number of times this Object is
                 referenced by other structures in the parser.
-            scope (str): The scope of the Object.
-            logWithParent (bool, optional): Whether or not the Object should
-                be logged with a parent structure (Object). Defaults to False.
+            scope (str): the scope of the Object.
+            logWithParent (bool, optional): whether or not the Object should
+                be logged with a parent structure (Object). defaults to False.
         """
         self.name = name
         self.reference = reference
@@ -257,7 +257,7 @@ class Object:
         values.
 
         Args:
-            field (ObjectField): ObjectField object to add to this instance.
+            field (ObjectField): ObjectField structure to add to this instance.
         """
         if field not in self.fields:
             calculatedColumn = utils.calculateColumn(len(field.name))
@@ -273,8 +273,8 @@ class Object:
         array.
 
         Args:
-            index (int): The index to insert the field at.
-            field (ObjectField): ObjectField object to add to this instance.
+            index (int): the index to insert the field at.
+            field (ObjectField): ObjectField structure to add to this instance.
         """
         for existingField in self.fields:
             if field.name == existingField.name:
@@ -288,7 +288,7 @@ class Object:
         array.
 
         Args:
-            idx (int): The index to remove.
+            idx (int): the index to remove.
         """
         self.fields.pop(idx)
 
@@ -299,7 +299,7 @@ class Object:
         already be in either the list of included fields or excluded fields.
 
         Args:
-            fieldName (str): The name of the field to be excluded.
+            fieldName (str): the name of the field to be excluded.
         """
         if fieldName not in self.excludedFields and fieldName not in self.includedFields:
             self.excludedFields.append(fieldName)
@@ -312,7 +312,7 @@ class Object:
         the list of included fields or excluded fields.
 
         Args:
-            fieldName (str): The name of the field to be included.
+            fieldName (str): the name of the field to be included.
         """
         if fieldName not in self.excludedFields and fieldName not in self.includedFields:
             self.includedFields.append(fieldName)
@@ -322,7 +322,7 @@ class Object:
         Adds a (non-duplicate) dependency to the Object.
 
         Args:
-            dependency (inputs.Dependency): The dependency to add.
+            dependency (inputs.Dependency): the dependency to add.
         """
         for existingDependency in self.dependsOn:
             if existingDependency.name == dependency.name:
@@ -336,7 +336,7 @@ class Object:
         Adds a (non-duplicate) linking field to the Object.
 
         Args:
-            field (Link): The linking field to add.
+            field (Link): the linking field to add.
         """
         for existingLink in self.linkIds:
             if field.name == existingLink.name:
@@ -349,20 +349,20 @@ class Object:
         using the data stored within it.
 
         Args:
-            customTypes (dict): The dictionary of any custom types used by the
+            customTypes (dict): the dictionary of any custom types used by the
                 parser.
-            bitfields (dict): Dictionary of all Bitfields for the parser
+            bitfields (dict): dictionary of all Bitfields for the parser
                 broken down by scope, followed by the name of the Bitfield.
-            switches (dict): Dictionary of all Switches for the parser broken
+            switches (dict): dictionary of all Switches for the parser broken
                 down by scope, followed by the name of the Switch.
-            enums (dict): Dictionary of all Enums for the parser broken down
+            enums (dict): dictionary of all Enums for the parser broken down
                 by scope, followed by the name of the Enum.
-            isPublic (bool, optional): Whether or not this Object is a "public"
-                type Object. In Spicy, public types are types that can be
-                called from other modules and Zeek. Defaults to False.
+            isPublic (bool, optional): whether or not this Object is a "public"
+                type Object. in Spicy, public types are types that can be
+                called from other modules and Zeek. defaults to False.
 
         Returns:
-            str: A string to use within a Spicy parser representing this
+            str: a string to use within a Spicy parser representing this
                 Object instance.
         """
         outputString = ""
@@ -408,10 +408,10 @@ class Object:
         instance.
 
         Args:
-            moduleName (str): The scope of this Object instance.
+            moduleName (str): the scope of this Object instance.
 
         Returns:
-            events.SpicyEvent: The event for this Object instance.
+            events.SpicyEvent: the event for this Object instance.
         """
         if self.logWithParent and not self.logIndependently:
             return []
@@ -431,12 +431,12 @@ class Object:
         specificExportOverride || not self.needsSpecificExport.
 
         Args:
-            specificExportOverride (bool): Whether to override the regular
+            specificExportOverride (bool): whether to override the regular
                 logic used to determine if a override is necessary. True means
                 that a override is necessary, otherwise use regular logic.
 
         Returns:
-            bool: True if an override is necessary. Otherwise False.
+            bool: True if an override is necessary. otherwise False.
         """
         if specificExportOverride:
             childOverride = True
@@ -449,14 +449,14 @@ class Object:
         Determine the name to use in an event backend for an Object.
 
         Args:
-            itemPrefix (str): The prefix to use instead of the object name if
+            itemPrefix (str): the prefix to use instead of the object name if
                 non-empty.
-            specificExportOverride (bool): Whether to override the regular
+            specificExportOverride (bool): whether to override the regular
                 logic used to determine if a override is necessary. True means
                 that a override is necessary, otherwise use regular logic.
 
         Returns:
-            str: The name to use for event backend generation for this Object
+            str: the name to use for event backend generation for this Object
                 instance.
         """
         if itemPrefix == "":
@@ -473,18 +473,18 @@ class Object:
         Generates the event field necessary for creating Zeek logs.
 
         Args:
-            moduleName (str): The scope of this Object instance.
-            zeekStructureName (str): Name of the Zeek log structure this will
+            moduleName (str): the scope of this Object instance.
+            zeekStructureName (str): name of the Zeek log structure this will
                 be logged to.
-            allBitfields (dict): Dictionary of all Bitfields for the parser
+            allBitfields (dict): dictionary of all Bitfields for the parser
                 broken down by scope, followed by the name of the Bitfield.
-            tabSize (int): The number of spaces to indent the returned lines
+            tabSize (int): the number of spaces to indent the returned lines
                 by.
 
         Returns:
-            (str, str): A tuple with the following values:
-                1. The local variable name for the new field.
-                2. The code to use for the new field.
+            (str, str): a tuple with the following values:
+                1. the local variable name for the new field.
+                2. the code to use for the new field.
         """
         event = self.getEvent(moduleName)
         localVariableName = "info_{}".format(zeekStructureName.lower())
@@ -501,15 +501,15 @@ class Object:
         Creates the emit statement for the Zeek logs.
 
         Args:
-            localVariableName (str): The local variable name used for the
+            localVariableName (str): the local variable name used for the
                 logging field (returned by a call to _adjustForNonFields).
-            tabSize (int): The number of spaces to indent the returned lines
+            tabSize (int): the number of spaces to indent the returned lines
                 by.
-            zeekStructureName (str): Name of the Zeek log structure this will
+            zeekStructureName (str): name of the Zeek log structure this will
                 be logged to.
 
         Returns:
-            str: The emit statement code.
+            str: the emit statement code.
         """
         argument = "c"
         if utils.USES_LAYER_2:
@@ -523,15 +523,15 @@ class Object:
         Creates the logging strings for all link IDs in the object.
 
         Args:
-            tabSize (int): The number of spaces to indent the returned lines
+            tabSize (int): the number of spaces to indent the returned lines
                 by.
-            localVariableName (str): The local variable name used for the
+            localVariableName (str): the local variable name used for the
                 logging field (returned by a call to _adjustForNonFields).
-            processingName (str): The name to use for event backend generation
+            processingName (str): the name to use for event backend generation
                 for this Object instance.
 
         Returns:
-            str: The logging assignment strings for all the link IDs in the object.
+            str: the logging assignment strings for all the link IDs in the object.
         """
         convertingFunctionString = ""
         for linkId in self.linkIds:
@@ -543,19 +543,19 @@ class Object:
         Adds the starting code to handle conditionals for a field if needed.
 
         Args:
-            startingTabSize (int): The number of levels to indent the returned
+            startingTabSize (int): the number of levels to indent the returned
                 lines by.
-            field (ObjectField): The field to process.
-            specificExportOverride (bool): Whether to override the regular
+            field (ObjectField): the field to process.
+            specificExportOverride (bool): whether to override the regular
                 logic used to determine if a override is necessary. True means
                 that a override is necessary, otherwise use regular logic.
-            processingName (str): The name to use for event backend generation
+            processingName (str): the name to use for event backend generation
                 for this Object instance.
 
         Returns:
-            (int, str): A tuple with the following values:
-                1. The new level of indentation to use.
-                2. The actual code to use for the conditional statement.
+            (int, str): a tuple with the following values:
+                1. the new level of indentation to use.
+                2. the actual code to use for the conditional statement.
         """
         tabSize = startingTabSize
         convertingFunctionString = ""
@@ -572,16 +572,16 @@ class Object:
         Adds the finishing code to handle conditionals for a field if needed.
 
         Args:
-            field (ObjectField): The field to process.
-            specificExportOverride (bool): Whether to override the regular
+            field (ObjectField): the field to process.
+            specificExportOverride (bool): whether to override the regular
                 logic used to determine if a override is necessary. True means
                 that a override is necessary, otherwise use regular logic.
-            tabSize (int): The number of spaces to indent the returned lines
-                by. This should be the value returned by
+            tabSize (int): the number of spaces to indent the returned lines
+                by. this should be the value returned by
                 _updateOnConditionals().
 
         Returns:
-            str: The code to use to finish the conditional statement.
+            str: the code to use to finish the conditional statement.
         """
         if len(field.conditional) > 0 and (not self.needsSpecificExport or specificExportOverride):
             return "{}}}\n".format(utils.getTabString(tabSize - 1))
@@ -593,25 +593,25 @@ class Object:
         Bitfield field.
 
         Args:
-            field (ObjectField): The field to process.
-            scopes (list): An array of strings with the scope names used within
+            field (ObjectField): the field to process.
+            scopes (list): an array of strings with the scope names used within
                 the parser.
-            allBitfields (dict): Dictionary of all Bitfields for the parser
+            allBitfields (dict): dictionary of all Bitfields for the parser
                 broken down by scope, followed by the name of the Bitfield.
-            allEnums (dict): Dictionary of all Enums for the parser broken down
+            allEnums (dict): dictionary of all Enums for the parser broken down
                 by scope, followed by the name of the Enum.
-            specificExportOverride (bool): Whether to override the regular
+            specificExportOverride (bool): whether to override the regular
                 logic used to determine if a override is necessary. True means
                 that a override is necessary, otherwise use regular logic.
-            localVariableName (str): The local variable name used for the
+            localVariableName (str): the local variable name used for the
                 logging field.
-            processingName (str): The name to use for event backend generation
+            processingName (str): the name to use for event backend generation
                 for this Object instance.
-            tabSize (int): The number of spaces to indent the returned lines
+            tabSize (int): the number of spaces to indent the returned lines
                 by.
 
         Returns:
-            str: The string representing an event backend for a Bitfield field.
+            str: the string representing an event backend for a Bitfield field.
         """
         referenceType = field.referenceType
         fieldPrefix = utils.commandNameToConst(self.name).lower() + "_" +  utils.commandNameToConst(field.name).lower()
@@ -644,20 +644,20 @@ class Object:
         Enum field.
 
         Args:
-            field (ObjectField): The field to process.
-            scopes (list): An array of strings with the scope names used within
+            field (ObjectField): the field to process.
+            scopes (list): an array of strings with the scope names used within
                 the parser.
-            allEnums (dict): Dictionary of all Enums for the parser broken down
+            allEnums (dict): dictionary of all Enums for the parser broken down
                 by scope, followed by the name of the Enum.
-            localVariableName (str): The local variable name used for the
+            localVariableName (str): the local variable name used for the
                 logging field.
-            processingName (str): The name to use for event backend generation
+            processingName (str): the name to use for event backend generation
                 for this Object instance.
-            tabSize (int): The number of spaces to indent the returned lines
+            tabSize (int): the number of spaces to indent the returned lines
                 by.
 
         Returns:
-            str: The string representing an event backend for an Enum field.
+            str: the string representing an event backend for an Enum field.
         """
         zeekName = utils.commandNameToConst(self.name).lower() + "_" + utils.commandNameToConst(field.name).lower()
         for scope in scopes:
@@ -672,18 +672,18 @@ class Object:
         valid list field.
 
         Args:
-            field (ObjectField): The field to process.
-            processingName (str): The name to use for event backend generation
+            field (ObjectField): the field to process.
+            processingName (str): the name to use for event backend generation
                 for this Object instance.
-            tabSize (int): The number of spaces to indent the returned lines
+            tabSize (int): the number of spaces to indent the returned lines
                 by.
-            localVariableName (str): The local variable name used for the
+            localVariableName (str): the local variable name used for the
                 logging field.
-            includeConditional (bool, optional): _description_. Defaults to False.
+            includeConditional (bool, optional): the list relies on a conditional. defaults to False.
 
         Returns:
-            str|None: If the list is valid, returns a string representing an
-                event backend for a List field. Otherwise, None.
+            str|None: if the list is valid, returns a string representing an
+                event backend for a List field. otherwise, None.
         """
         convertingFunctionString = ""
         zeekName = utils.commandNameToConst(self.name).lower() + "_" + utils.commandNameToConst(field.name).lower()
@@ -711,29 +711,29 @@ class Object:
         Object field.
 
         Args:
-            field (ObjectField): The field to process.
-            processingName (str): The name to use for event backend generation
+            field (ObjectField): the field to process.
+            processingName (str): the name to use for event backend generation
                 for this Object instance.
-            moduleName (str): The scope of this Object instance.
-            allEnums (dict): Dictionary of all Enums for the parser broken down
+            moduleName (str): the scope of this Object instance.
+            allEnums (dict): dictionary of all Enums for the parser broken down
                 by scope, followed by the name of the Enum.
-            allBitfields (dict): Dictionary of all Bitfields for the parser
+            allBitfields (dict): dictionary of all Bitfields for the parser
                 broken down by scope, followed by the name of the Bitfield.
-            allObjects (dict): Dictionary of all Objects for the parser broken
+            allObjects (dict): dictionary of all Objects for the parser broken
                 down by scope, followed by the name of the Object.
-            allSwitches (dict): Dictionary of all Switches for the parser broken
+            allSwitches (dict): dictionary of all Switches for the parser broken
                 down by scope, followed by the name of the Switch.
-            scopes (list): An array of strings with the scope names used within
+            scopes (list): an array of strings with the scope names used within
                 the parser.
-            localVariableName (str): The local variable name used for the
+            localVariableName (str): the local variable name used for the
                 logging field.
-            startingTabSize (int): The number of levels to indent the returned
+            startingTabSize (int): the number of levels to indent the returned
                 lines by.
             childOverride (bool): True if the child information needs to be
-                overriden. Otherwise, False.
+                overriden. otherwise, False.
 
         Returns:
-            str: The string representing an event backend for an Object field.
+            str: the string representing an event backend for an Object field.
         """
         referencedObject = None
         for scope in scopes:
@@ -751,31 +751,31 @@ class Object:
         Switch Action.
 
         Args:
-            action (switches.SwitchAction): The switch action to process.
-            processingName (str): The name to use for event backend generation
+            action (switches.SwitchAction): the switch action to process.
+            processingName (str): the name to use for event backend generation
                 for this Object instance.
-            moduleName (str): The scope of this Object instance.
-            allEnums (dict): Dictionary of all Enums for the parser broken down
+            moduleName (str): the scope of this Object instance.
+            allEnums (dict): dictionary of all Enums for the parser broken down
                 by scope, followed by the name of the Enum.
-            allBitfields (dict): Dictionary of all Bitfields for the parser
+            allBitfields (dict): dictionary of all Bitfields for the parser
                 broken down by scope, followed by the name of the Bitfield.
-            allObjects (dict): Dictionary of all Objects for the parser broken
+            allObjects (dict): dictionary of all Objects for the parser broken
                 down by scope, followed by the name of the Object.
-            allSwitches (dict): Dictionary of all Switches for the parser broken
+            allSwitches (dict): dictionary of all Switches for the parser broken
                 down by scope, followed by the name of the Switch.
-            scopes (list): An array of strings with the scope names used within
+            scopes (list): an array of strings with the scope names used within
                 the parser.
-            localVariableName (str): The local variable name used for the
+            localVariableName (str): the local variable name used for the
                 logging field.
-            startingTabSize (int): The number of levels to indent the returned
+            startingTabSize (int): the number of levels to indent the returned
                 lines by.
             childOverride (bool): True if the child information needs to be
-                overriden. Otherwise, False.
-            tabSize (int): The number of spaces per level to indent the
+                overriden. otherwise, False.
+            tabSize (int): the number of spaces per level to indent the
                 returned lines by.
 
         Returns:
-            str: The string representing an event backend for a Switch Action.
+            str: the string representing an event backend for a Switch Action.
         """
         convertingFunctionString = ""
         if action.type == "object":
@@ -818,31 +818,31 @@ class Object:
         Switch Options in a switch.
 
         Args:
-            switch (switches.Switch): The Switch to process.
-            processingName (str): The name to use for event backend generation
+            switch (switches.Switch): the Switch to process.
+            processingName (str): the name to use for event backend generation
                 for this Object instance.
-            moduleName (str): The scope of this Object instance.
-            allEnums (dict): Dictionary of all Enums for the parser broken down
+            moduleName (str): the scope of this Object instance.
+            allEnums (dict): dictionary of all Enums for the parser broken down
                 by scope, followed by the name of the Enum.
-            allBitfields (dict): Dictionary of all Bitfields for the parser
+            allBitfields (dict): dictionary of all Bitfields for the parser
                 broken down by scope, followed by the name of the Bitfield.
-            allObjects (dict): Dictionary of all Objects for the parser broken
+            allObjects (dict): dictionary of all Objects for the parser broken
                 down by scope, followed by the name of the Object.
-            allSwitches (dict): Dictionary of all Switches for the parser broken
+            allSwitches (dict): dictionary of all Switches for the parser broken
                 down by scope, followed by the name of the Switch.
-            scopes (list): An array of strings with the scope names used within
+            scopes (list): an array of strings with the scope names used within
                 the parser.
-            localVariableName (str): The local variable name used for the
+            localVariableName (str): the local variable name used for the
                 logging field.
-            startingTabSize (int): The number of levels to indent the returned
+            startingTabSize (int): the number of levels to indent the returned
                 lines by.
             childOverride (bool): True if the child information needs to be
-                overriden. Otherwise, False.
-            tabSize (int): The number of spaces per level to indent the
+                overriden. otherwise, False.
+            tabSize (int): the number of spaces per level to indent the
                 returned lines by.
 
         Returns:
-            str: The string representing an event backend for all switch
+            str: the string representing an event backend for all switch
                 options in a switch.
         """
         convertingFunctionString = ""
@@ -856,31 +856,31 @@ class Object:
         Switch default.
 
         Args:
-            switch (switches.Switch): The Switch to process.
-            processingName (str): The name to use for event backend generation
+            switch (switches.Switch): the Switch to process.
+            processingName (str): the name to use for event backend generation
                 for this Object instance.
-            moduleName (str): The scope of this Object instance.
-            allEnums (dict): Dictionary of all Enums for the parser broken down
+            moduleName (str): the scope of this Object instance.
+            allEnums (dict): dictionary of all Enums for the parser broken down
                 by scope, followed by the name of the Enum.
-            allBitfields (dict): Dictionary of all Bitfields for the parser
+            allBitfields (dict): dictionary of all Bitfields for the parser
                 broken down by scope, followed by the name of the Bitfield.
-            allObjects (dict): Dictionary of all Objects for the parser broken
+            allObjects (dict): dictionary of all Objects for the parser broken
                 down by scope, followed by the name of the Object.
-            allSwitches (dict): Dictionary of all Switches for the parser broken
+            allSwitches (dict): dictionary of all Switches for the parser broken
                 down by scope, followed by the name of the Switch.
-            scopes (list): An array of strings with the scope names used within
+            scopes (list): an array of strings with the scope names used within
                 the parser.
-            localVariableName (str): The local variable name used for the
+            localVariableName (str): the local variable name used for the
                 logging field.
-            startingTabSize (int): The number of levels to indent the returned
+            startingTabSize (int): the number of levels to indent the returned
                 lines by.
             childOverride (bool): True if the child information needs to be
-                overriden. Otherwise, False.
-            tabSize (int): The number of spaces per level to indent the
+                overriden. otherwise, False.
+            tabSize (int): the number of spaces per level to indent the
                 returned lines by.
 
         Returns:
-            str: The string representing an event backend for a Switch default.
+            str: the string representing an event backend for a Switch default.
         """
         return self._makeEventBackendForSwitchAction(switch.default, processingName, moduleName, allEnums, allBitfields, allObjects, allSwitches, scopes, localVariableName, startingTabSize, childOverride, tabSize)
 
@@ -890,31 +890,31 @@ class Object:
         Switch field.
 
         Args:
-            field (ObjectField): The field to process.
-            processingName (str): The name to use for event backend generation
+            field (ObjectField): the field to process.
+            processingName (str): the name to use for event backend generation
                 for this Object instance.
-            moduleName (str): The scope of this Object instance.
-            allEnums (dict): Dictionary of all Enums for the parser broken down
+            moduleName (str): the scope of this Object instance.
+            allEnums (dict): dictionary of all Enums for the parser broken down
                 by scope, followed by the name of the Enum.
-            allBitfields (dict): Dictionary of all Bitfields for the parser
+            allBitfields (dict): dictionary of all Bitfields for the parser
                 broken down by scope, followed by the name of the Bitfield.
-            allObjects (dict): Dictionary of all Objects for the parser broken
+            allObjects (dict): dictionary of all Objects for the parser broken
                 down by scope, followed by the name of the Object.
-            allSwitches (dict): Dictionary of all Switches for the parser broken
+            allSwitches (dict): dictionary of all Switches for the parser broken
                 down by scope, followed by the name of the Switch.
-            scopes (list): An array of strings with the scope names used within
+            scopes (list): an array of strings with the scope names used within
                 the parser.
-            localVariableName (str): The local variable name used for the
+            localVariableName (str): the local variable name used for the
                 logging field.
-            startingTabSize (int): The number of levels to indent the returned
+            startingTabSize (int): the number of levels to indent the returned
                 lines by.
             childOverride (bool): True if the child information needs to be
-                overriden. Otherwise, False.
-            tabSize (int): The number of spaces per level to indent the returned
+                overriden. otherwise, False.
+            tabSize (int): the number of spaces per level to indent the returned
                 lines by.
 
         Returns:
-            str: The string representing an event backend for a Switch field.
+            str: the string representing an event backend for a Switch field.
         """
         convertingFunctionString = ""
         for switchScope in scopes:
@@ -937,34 +937,34 @@ class Object:
         Object instance.
 
         Args:
-            moduleName (str): The scope of this Object instance.
-            zeekStructureName (str): Name of the Zeek log structure this will
+            moduleName (str): the scope of this Object instance.
+            zeekStructureName (str): name of the Zeek log structure this will
                 be logged to.
-            allEnums (dict): Dictionary of all Enums for the parser broken down
+            allEnums (dict): dictionary of all Enums for the parser broken down
                 by scope, followed by the name of the Enum.
-            allBitfields (dict): Dictionary of all Bitfields for the parser
+            allBitfields (dict): dictionary of all Bitfields for the parser
                 broken down by scope, followed by the name of the Bitfield.
-            allObjects (dict): Dictionary of all Objects for the parser broken
+            allObjects (dict): dictionary of all Objects for the parser broken
                 down by scope, followed by the name of the Object.
-            allSwitches (dict): Dictionary of all Switches for the parser broken
+            allSwitches (dict): dictionary of all Switches for the parser broken
                 down by scope, followed by the name of the Switch.
-            scopes (list): An array of strings with the scope names used within
+            scopes (list): an array of strings with the scope names used within
                 the parser.
-            includeNonFields (bool, optional): Should non-fields (i.e., event
-                fields for logs themselves) be added?. Defaults to True.
-            logObjectVariableName (str, optional): The variable name used for
-                the logging field. Defaults to "".
-            itemPrefix (str, optional): The prefix to use instead of the object
-                name if non-empty. Defaults to "".
-            startingTabSize (int, optional): The number of levels to indent the
-                returned lines by. Defaults to 1.
-            specificExportOverride (bool, optional): Whether to override the
+            includeNonFields (bool, optional): should non-fields (i.e., event
+                fields for logs themselves) be added?. defaults to True.
+            logObjectVariableName (str, optional): the variable name used for
+                the logging field. defaults to "".
+            itemPrefix (str, optional): the prefix to use instead of the object
+                name if non-empty. defaults to "".
+            startingTabSize (int, optional): the number of levels to indent the
+                returned lines by. defaults to 1.
+            specificExportOverride (bool, optional): whether to override the
                 regular logic used to determine if a override is necessary.
                 True means that a override is necessary, otherwise use regular
-                logic. Defaults to False.
+                logic. defaults to False.
 
         Returns:
-            str: Event backend for an Object instance.
+            str: event backend for an Object instance.
         """
         convertingFunctionString = ""
         localVariableName = logObjectVariableName

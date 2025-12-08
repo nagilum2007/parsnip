@@ -26,7 +26,7 @@ class EnumField:
     # enumFields are different options inside an enumeration
     def __init__(self, name, loggingValue, value):
         """
-        Initialization function
+        Initialization function.
 
         Args:
             name (str): field name.
@@ -66,7 +66,7 @@ class Enums:
     """
     def __init__(self, name, reference, size):
         """
-        Initialization function
+        Initialization function.
 
         Args:
             name (str): enum structure name

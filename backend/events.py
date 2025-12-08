@@ -49,7 +49,7 @@ class SpicyEvent:
 
     def __init__(self, includedFields=[], linkFields=[]):
         """
-        Initialization function
+        Initialization function.
 
         Args:
             includedFields (list, optional): object fields to use with the
